@@ -1,7 +1,8 @@
+// Setup App Header
+
 const http = require('http');
 const https = require('https');
 const request = require('request');
-
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -15,6 +16,7 @@ server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
+// End Header
 
 // Mock Call
 https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
@@ -48,7 +50,7 @@ request.post('https://flaviocopes.com/todos', {
   }
   console.log(`statusCode: ${res.statusCode}`)
   console.log(body)
-})
+});
 
 // Vanilla `http` get request (too verbose)
 function getLoginDetails(callback) {
@@ -70,4 +72,4 @@ return http.get({
             });
         });
     });
-},
+};
