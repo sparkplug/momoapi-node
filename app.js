@@ -52,24 +52,35 @@ request.post('https://flaviocopes.com/todos', {
   console.log(body)
 });
 
-// Vanilla `http` get request (too verbose)
-function getLoginDetails(callback) {
-return http.get({
-        host: 'locatemap.in',
-        path: '/userDetail'
-    }, function(response) {
-        // Continuously update stream with data
-        var body = '';
-        response.on('data', function(d) {
-            body += d;
-        });
-        response.on('end', function() {
-// Data received, let us parse it using JSON!
-            var parsed = JSON.parse(body);
-            callback({
-                userDetail: parsed.name,
-                userId: parsed.Id
-            });
-        });
-    });
-};
+// Vanilla `http` get request (too verbose) -- but concise
+const https = require('https')
+
+const data = JSON.stringify({
+  todo: 'Buy the milk'
+})
+
+const options = {
+  hostname: 'flaviocopes.com',
+  port: 443,
+  path: '/todos',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Content-Length': data.length
+  }
+}
+
+const req = https.request(options, (res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+
+  res.on('data', (d) => {
+    process.stdout.write(d)
+  })
+})
+
+req.on('error', (error) => {
+  console.error(error)
+})
+
+req.write(data)
+req.end()
