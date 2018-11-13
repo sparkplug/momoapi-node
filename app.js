@@ -84,3 +84,43 @@ req.on('error', (error) => {
 
 req.write(data)
 req.end()
+
+// Another One
+
+function getTestPersonaLoginCredentials(callback) {
+
+    return http.get({
+        host: 'personatestuser.org',
+        path: '/email'
+    }, function(response) {
+        // Continuously update stream with data
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        response.on('end', function() {
+
+            // Data reception is done, do whatever with it!
+            var parsed = JSON.parse(body);
+            callback({
+                email: parsed.email,
+                password: parsed.pass
+            });
+        });
+    });
+};
+
+// ES6 + Async/Await + Node.fetch
+const fetch = require("node-fetch");
+const url = "https://jsonplaceholder.typicode.com/posts/1";
+
+const getData = async url => {
+  try {
+    const response = await fetch(url);
+    const json = await response.json();
+    console.log(json);
+  } catch (error) {
+    console.log(error);
+  }
+};
+getData(url);
