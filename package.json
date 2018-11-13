@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sparkplug/momoapi-node/issues"
   },
-  "homepage": "https://github.com/sparkplug/momoapi-node#readme"
+  "homepage": "https://github.com/sparkplug/momoapi-node#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
 }
