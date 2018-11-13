@@ -1,4 +1,6 @@
 const http = require('http');
+const https = require('https');
+const request = require('request');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -15,9 +17,6 @@ server.listen(port, hostname, () => {
 
 
 // Mock Call
-
-const https = require('https');
-
 https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
   let data = '';
 
@@ -35,4 +34,18 @@ https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
   console.log("Error: " + err.message);
 });
 
+// Mock Call using `request`
+const request = require('request')
 
+request.post('https://flaviocopes.com/todos', {
+  json: {
+    todo: 'Buy the milk'
+  }
+}, (error, res, body) => {
+  if (error) {
+    console.error(error)
+    return
+  }
+  console.log(`statusCode: ${res.statusCode}`)
+  console.log(body)
+})
