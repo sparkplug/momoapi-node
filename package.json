@@ -4,7 +4,8 @@
   "description": "MTN Mobile Money Open API",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",

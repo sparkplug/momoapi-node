@@ -9,5 +9,5 @@ To install and use this Client, ensure you have npm installed. Clone the reposit
 # Run 
 To run it, simply use the following command
 
-` npm app.js `
+` nodemon start `
 
