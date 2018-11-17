@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sparkplug/momoapi-node#readme",
   "dependencies": {
+    "node-fetch": "^2.3.0",
     "querystring": "^0.2.0",
     "request": "^2.88.0"
   }
