@@ -37,7 +37,6 @@ https.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
 });
 
 // Mock Call using `request`
-const request = require('request')
 
 request.post('https://flaviocopes.com/todos', {
   json: {
@@ -53,7 +52,6 @@ request.post('https://flaviocopes.com/todos', {
 });
 
 // Vanilla `http` get request (too verbose) -- but concise
-const https = require('https')
 
 const data = JSON.stringify({
   todo: 'Buy the milk'
