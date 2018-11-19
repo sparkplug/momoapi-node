@@ -1,9 +1,9 @@
 # build output
-dist
-build
+dist/
+
 
 # dependencies
-node_modules
+node_modules/
 yarn-error.log
 npm-debug*
 
