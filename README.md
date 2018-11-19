@@ -9,12 +9,15 @@ MTN MoMo API Client for Node JS.
 
 
 #  Usage 
-There are two methods which are related to the collections product in [this](https://github.com/Kaminto/momoapi-node/blob/master/src/main.ts) file.
 
+The currently available methods
 
--[**requestToPay**](https://github.com/Kaminto/momoapi-node/blob/master/src/main.ts#L12)
+## requestToPay
 
-`collectionTransaction.requestToPay(subscription-key,host,enviroment, {
+This method sends out a requestToPay to a client
+
+```node
+collectionTransaction.requestToPay(subscription-key,host,enviroment, {
     amount: string,
     currency: string,
     externalId: string,
@@ -24,13 +27,13 @@ There are two methods which are related to the collections product in [this](htt
     },
     payerMessage: string,
     payeeNote: string
-})`
+})
+```
 
+## getBalance
 
+```node
+collectionTransaction.getBalance(subscription-key,enviroment)
+```
 
--[**getBalance**](https://github.com/Kaminto/momoapi-node/blob/master/src/main.ts#L27)
-
-
-`collectionTransaction.getBalance(subscription-key,enviroment)`
-
--This method returns the balance
+This method returns the balance
