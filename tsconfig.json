@@ -1,24 +1,12 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "declaration": true,
-      "noImplicitAny": false,
-      "removeComments": true,
-      "noLib": false,
-      "allowSyntheticDefaultImports": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "target": "es6",
-      "sourceMap": true,
-      "outDir": "./dist",
-      "baseUrl": "./src"
-    },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules",
-      "**/*.spec.ts"
-    ]
-  }
-  
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es2015", "es2016"],
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "exclude": ["lib", "node_modules"]
+}
