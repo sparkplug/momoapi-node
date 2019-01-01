@@ -1,0 +1,35 @@
+language: node_js
+
+node_js:
+  - v9
+
+install:
+  - npm install
+
+script:
+  - npm run compile
+
+deploy:
+  - provider: npm
+    email: okot08@gmail.com
+    api_key:
+      secure: "npm key"
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: sparkplug/momoapi-node
+      branch: production
+
+  - provider: releases
+    api_key:
+      secure: "npm key"
+    file: 'lib'
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: sparkplug/momoapi-node
+      branch: production
+
+cache:
+  - yarn
+  - node_modules
