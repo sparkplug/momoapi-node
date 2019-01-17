@@ -16,16 +16,16 @@ export interface OAuthCredentials {
 
 export type TokenRefresher = () => Promise<OAuthCredentials>;
 
-export type Authenticator = (config: Config) => Promise<AccessToken>;
+export type Authorizer = (config: Config) => Promise<AccessToken>;
 
 export default function getTokenRefresher(
-  authenticate: Authenticator,
+  authorize: Authorizer,
   config: Config
 ): TokenRefresher {
   let credentials: OAuthCredentials;
   return () => {
     if (isExpired(credentials)) {
-      return authenticate(config)
+      return authorize(config)
         .then(getCredentials)
         .then(freshCredentials => {
           credentials = freshCredentials;
@@ -37,7 +37,7 @@ export default function getTokenRefresher(
   };
 }
 
-export const authorizeCollections: Authenticator = function(
+export const authorizeCollections: Authorizer = function(
   config: Config
 ): Promise<AccessToken> {
   const basicAuthToken: string = createBasicAuthToken(config);

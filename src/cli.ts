@@ -2,7 +2,7 @@
 
 import program from "commander";
 
-import { Users, Credentials } from ".";
+import { Credentials, Users } from ".";
 
 const { version } = require("../package.json");
 
@@ -13,6 +13,8 @@ program
   .option("-p, --primary-key <n>", "Primary Key")
   .parse(process.argv);
 
+const stringify = (obj: object) => JSON.stringify(obj, null, 2);
+
 const users = new Users({ subscriptionKey: program.primaryKey });
 
 users
@@ -21,21 +23,19 @@ users
     return users.login(userId).then((credentials: Credentials) => {
       console.log(
         "Momo Sandbox Credentials",
-        JSON.stringify(
-          {
-            userSecret: credentials.apiKey,
-            userId: userId
-          },
-          null,
-          2
-        )
+        stringify({
+          userSecret: credentials.apiKey,
+          userId
+        })
       );
     });
   })
   .catch(error => {
+    let message: string = stringify(error.message);
+
     if (error.response && error.response.data) {
-      console.log(error.response.data);
+      message = stringify(error.response.data);
     }
 
-    console.log(error.message);
+    console.log(message);
   });

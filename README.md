@@ -1,4 +1,4 @@
-# MoMoApi Node Proposal
+# MTN MoMo API Client
 
 MTN MoMo API Client for Node JS.
 
@@ -11,41 +11,55 @@ git clone git@github.com:sparkplug/momoapi-node.git
 cd momoapi-node
 npm install
 npm run compile
-npm link # to test and develop cli tooling locally, see below
+npm link # to test and develop cli tooling in development
 ```
 
-## Proposed usage
-
-## Sandbox Credentials
-
-To get sandbox credentials, install the package globally and run the `momo-sandbox` command
-
-```sh
-npm install --global momoapi-node
-momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
-```
-
->  For now, you can only test the cli by running `npm link` after cloning and compiling this app
+## Usage
 
 ### Installation
 
 Add the library to your project
 
 ```sh
-npm install momoapi-node # this isn't published yet
+npm install mtn-momo
+```
+
+## Sandbox Credentials
+
+To get sandbox credentials; install the package globally and run the `momo-sandbox` command or install the package locally to your project and run `momo-sandbox` with the `npx` command.
+
+```sh
+## Within a project
+npm install --save momoapi-node
+npx momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
+
+## Globally
+npm install --global momoapi-node
+momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
 ```
 
 ### Collections
 
+The collections client can be created with the following paramaters;
+- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
+- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox by default
+- `host`: The domain where you webhooks urls are hosted;
+- `subscriptionKey`: Find this on the MTN Momo API dashboard
+- `userId`: For production, find your Collections User ID on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+- `userSecret`: For production, find your Collections User Secret on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+
+**Sample Code**
+
 ```js
-const momo = require("momoapi-node");
+const momo = require("mtn-momo");
 
 // initialise the collections api
 const collections = new momo.Collections({
   userSecret: process.env.USER_SECRET,
   userId: process.env.USER_ID,
   subscriptionKey: process.env.SUBSCRIPTION_KEY,
-  environment: process.env.ENVIRONMENT
+  environment: process.env.ENVIRONMENT,
+  host
 });
 
 // Request to pay
