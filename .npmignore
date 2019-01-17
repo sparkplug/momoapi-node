@@ -1,6 +1,6 @@
-# build output
-dist/
-lib
+# source code
+src/
+examples/
 
 # dependencies
 node_modules/
@@ -10,6 +10,7 @@ npm-debug*
 # logs
 *.log
 .env 
+
 # coverage
 .nyc_output
 coverage

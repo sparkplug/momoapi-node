@@ -3,17 +3,16 @@ import uuid from "uuid/v4";
 
 import { createBasicClient } from "./client";
 
-export interface Subscription {
-  userId?: string;
-  subscriptionKey: string;
-}
-
 export interface Credentials {
   apiKey: string;
 }
+export interface Subscription {
+  baseUrl?: string;
+  subscriptionKey: string;
+}
 
 export default class Users {
-  client: AxiosInstance;
+  private client: AxiosInstance;
 
   constructor(config: Subscription) {
     this.client = createBasicClient(config);

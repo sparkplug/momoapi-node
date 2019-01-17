@@ -1,12 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { Config } from ".";
-
-import getTokenRefresher, { Authenticator, TokenRefresher } from "./oauth";
+import getTokenRefresher, { Authorizer, TokenRefresher } from "./oauth";
 import { Subscription } from "./users";
 
 export function createBasicClient(config: Subscription): AxiosInstance {
-  const baseURL = "https://ericssonbasicapi2.azure-api.net";
+  const baseURL = config.baseUrl || "https://ericssonbasicapi2.azure-api.net";
   return axios.create({
     baseURL,
     headers: {
@@ -18,10 +17,10 @@ export function createBasicClient(config: Subscription): AxiosInstance {
 
 export function createOAuthClient(
   config: Config,
-  authenticator: Authenticator
+  authorize: Authorizer
 ): AxiosInstance {
   const instance = createBasicClient(config);
-  const refresh: TokenRefresher = getTokenRefresher(authenticator, config);
+  const refresh: TokenRefresher = getTokenRefresher(authorize, config);
 
   instance.interceptors.request.use((request: AxiosRequestConfig) => {
     return refresh().then(({ accessToken }) => {
@@ -29,8 +28,8 @@ export function createOAuthClient(
         ...request,
         headers: {
           ...request.headers,
-          Authorization: `Bearer ${accessToken}`,
-          "X-Target-Environment": "sandbox"
+          "Authorization": `Bearer ${accessToken}`,
+          "X-Target-Environment": config.environment || "sandbox"
         }
       };
     });

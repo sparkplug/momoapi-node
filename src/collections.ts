@@ -2,8 +2,8 @@ import { AxiosInstance } from "axios";
 import uuid from "uuid/v4";
 
 import { Config } from ".";
-import { authorizeCollections } from "./oauth";
 import { createOAuthClient } from "./client";
+import { authorizeCollections } from "./oauth";
 
 export interface Payer {
   partyIdType: "MSISDN" | string;
