@@ -1,5 +1,6 @@
-import { createBasicAuthToken } from "../src/oauth";
 import { expect } from "chai";
+
+import { createBasicAuthToken } from "../src/oauth";
 
 describe("OAuth", function() {
   describe("createBasicAuthToken", function() {

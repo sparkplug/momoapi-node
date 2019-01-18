@@ -3,7 +3,7 @@ language: node_js
 node_js: 8
 
 install:
-  - yarn
+  - npm ci
 
 script:
   - npm run lint
@@ -12,20 +12,20 @@ script:
 
 deploy:
   - provider: npm
-    email: "YOUR_EMAIL_ADDRESS"
-    api_key: "YOUR_AUTH_TOKEN"
+    email: "$NPM_EMAIL"
+    api_key: "$NPM_TOKEN"
     skip_cleanup: true
     on:
       tags: true
       repo: sparkplug/momoapi-node
-      branch: 'master'
+      branch: master
 
   - provider: releases
-    api_key: "YOUR_AUTH_TOKEN"
+    api_key: "$GITHUB_TOKEN"
     file_glob: true
-    file: 'dist/di-*'
+    file: "lib"
     skip_cleanup: true
     on:
       tags: true
-    repo: sparkplug/momoapi-node
+      repo: sparkplug/momoapi-node
       branch: master
