@@ -1,13 +1,13 @@
 {
   "name": "mtn-momo",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "MTN Momo API Client for NodeJS written in TypeScript",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rm -r lib",
     "compile": "tsc -p tsconfig.json",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "test": "NODE_ENV=test mocha -r ts-node/register \"./test/**/*.ts\" --exit"
+    "test": "NODE_ENV=test mocha -r ts-node/register \"./tests/**/*.ts\" --exit"
   },
   "keywords": [
     "MTN",
