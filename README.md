@@ -28,47 +28,74 @@ npm install --global momoapi-node
 momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
 ```
 
-## Collections
+If all goes well, it will print something like this in your terminal;
 
-The collections client can be created with the following paramaters;
-- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
-- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox by default
-- `host`: The domain where you webhooks urls are hosted;
-- `subscriptionKey`: Find this on the MTN Momo API dashboard
-- `userId`: For production, find your Collections User ID on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
-- `userSecret`: For production, find your Collections User Secret on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+```sh
+Momo Sandbox Credentials {
+  "userSecret": "b2e23bf4e3984a16a55dbfc2d45f66b0",
+  "userId": "8ecc7cf3-0db8-4013-9c7b-da4894460041"
+}
+```
 
+You can use those values when developing against the sandbox. When ready to go live, 
 
+## Configuration
 
-You can create a collections client with the following;
+Before you can use collections, and later disbursements, you need to create an instance of the client. This library exports a function that returns the client given global configuration;
 
 ```js
 const momo = require("mtn-momo");
 
-const collections = new momo.Collections({
-  baseUrl: "the api base url",
-  userSecret: "your api secret",
-  userId: "your api user id",
-  subscriptionKey: "your primary or secondary key",
-  environment: "sandbox" or "production",
-  callbackHost: "your callback host"
-});
+const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+```
 
+The global configuration must contain the following;
+
+- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
+- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox by default
+- `callbackHost`: The domain where you webhooks urls are hosted;
+
+
+## Collections
+
+The collections client can be created with the following paramaters;
+
+- `subscriptionKey`: Find this on the MTN Momo API dashboard
+- `userId`: For production, find your Collections User ID on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+- `userSecret`: For production, find your Collections User Secret on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+
+You can create a collections client with the following;
+
+```js
+const collections = Collections({
+  userSecret: process.env.USER_SECRET,
+  userId: process.env.USER_ID,
+  primaryKey: process.env.PRIMARY_KEY
+});
 ```
 
 #### Methods
 
 1. `requestToPay(request: PaymentRequest): Promise<string>`
 
-  This method inititates a payment. The user can then authorise to it with their PIN. It returns a promise that resolves the transaction id. You can use the transaction id to check the transaction status, check the nmethod below.
+This method inititates a payment. The user can then authorise to it with their PIN. It returns a promise that resolves the transaction id. You can use the transaction id to check the transaction status, check the nmethod below.
 
 2. `getTransactionStatus(transactionId: string): Promise<Transaction>`
 
 3. `getAccountBalance(): Promise<AccountBalance>`
 
-
 #### Sample Code
+
 ```js
+const momo = require("mtn-momo");
+
+const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+
+const collections = Collections({
+  userSecret: process.env.USER_SECRET,
+  userId: process.env.USER_ID,
+  primaryKey: process.env.PRIMARY_KEY
+});
 
 // Request to pay
 collections
@@ -87,21 +114,21 @@ collections
     console.log({ transactionId });
 
     // Get transaction status
-    return collections.getTransactionStatus(transactionId);
+    return collections.getTransaction(transactionId);
   })
-  .then(transactionStatus => {
-    console.log({ transactionStatus });
+  .then(transaction => {
+    console.log({ transaction });
 
     // Get account balance
-    return collections.getAccountBalance();
+    return collections.getBalance();
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response && error.response.data) {
-      console.log(error.response.data);
+    if (error.response) {
+      return console.log(error.response.data, error.response.config);
     }
 
-    console.log(error.message);
+    return console.log(error.message);
   });
 ```
 
@@ -114,6 +141,5 @@ git clone git@github.com:sparkplug/momoapi-node.git
 cd momoapi-node
 npm install
 npm run compile
-npm link # to test and develop cli tooling in development
+npm link # to test and develop the cli tool locally
 ```
-

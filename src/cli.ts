@@ -2,7 +2,9 @@
 
 import program from "commander";
 
-import { Credentials, Users } from ".";
+import momo from "./";
+
+import { Credentials } from "./types";
 
 const { version } = require("../package.json");
 
@@ -15,7 +17,9 @@ program
 
 const stringify = (obj: object) => JSON.stringify(obj, null, 2);
 
-const users = new Users({ subscriptionKey: program.primaryKey });
+const { Users } = momo();
+
+const users = Users({ primaryKey: program.primaryKey });
 
 users
   .create(program.host)
