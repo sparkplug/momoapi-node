@@ -1,13 +1,10 @@
+import { AxiosInstance } from "axios";
 import moment from "moment";
 
-import { Config } from ".";
-import { createBasicClient } from "./client";
+import { createClient } from "./client";
 
-export interface AccessToken {
-  access_token: string;
-  token_type: "string";
-  expires_in: 3600;
-}
+import { Config, UserConfig } from "./types";
+import { AccessToken } from "./types";
 
 export interface OAuthCredentials {
   accessToken: string;
@@ -16,9 +13,12 @@ export interface OAuthCredentials {
 
 export type TokenRefresher = () => Promise<OAuthCredentials>;
 
-export type Authorizer = (config: Config) => Promise<AccessToken>;
+export type Authorizer = (
+  config: Config,
+  client?: AxiosInstance
+) => Promise<AccessToken>;
 
-export default function getTokenRefresher(
+export function createTokenRefresher(
   authorize: Authorizer,
   config: Config
 ): TokenRefresher {
@@ -26,7 +26,15 @@ export default function getTokenRefresher(
   return () => {
     if (isExpired(credentials)) {
       return authorize(config)
-        .then(getCredentials)
+        .then((accessToken: AccessToken) => {
+          const { access_token, expires_in }: AccessToken = accessToken;
+          return {
+            accessToken: access_token,
+            expires: moment()
+              .add(expires_in, "seconds")
+              .toDate()
+          };
+        })
         .then(freshCredentials => {
           credentials = freshCredentials;
           return credentials;
@@ -38,11 +46,12 @@ export default function getTokenRefresher(
 }
 
 export const authorizeCollections: Authorizer = function(
-  config: Config
+  config: Config,
+  client: AxiosInstance = createClient(config)
 ): Promise<AccessToken> {
   const basicAuthToken: string = createBasicAuthToken(config);
-  return createBasicClient(config)
-    .post<AccessToken>("/colection/token/", null, {
+  return client
+    .post<AccessToken>("/collection/token/", null, {
       headers: {
         Authorization: `Basic ${basicAuthToken}`
       }
@@ -50,7 +59,7 @@ export const authorizeCollections: Authorizer = function(
     .then(response => response.data);
 };
 
-export function createBasicAuthToken(config: Config): string {
+export function createBasicAuthToken(config: UserConfig): string {
   return Buffer.from(`${config.userId}:${config.userSecret}`).toString(
     "base64"
   );
@@ -62,14 +71,4 @@ function isExpired(credentials: OAuthCredentials): boolean {
   }
 
   return moment().isAfter(credentials.expires);
-}
-
-function getCredentials(accessToken: AccessToken): OAuthCredentials {
-  const { access_token, expires_in } = accessToken;
-  return {
-    accessToken: access_token,
-    expires: moment()
-      .add(expires_in, "seconds")
-      .toDate()
-  };
 }

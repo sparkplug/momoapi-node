@@ -1,39 +1,37 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-import { Config } from ".";
-import getTokenRefresher, { Authorizer, TokenRefresher } from "./oauth";
-import { Subscription } from "./users";
+import { TokenRefresher } from "./auth";
 
-export function createBasicClient(config: Subscription): AxiosInstance {
-  const baseURL = config.baseUrl || "https://ericssonbasicapi2.azure-api.net";
-  return axios.create({
-    baseURL,
-    headers: {
-      "Content-Type": "application/json",
-      "Ocp-Apim-Subscription-Key": config.subscriptionKey
-    }
-  });
+import { Config, GlobalConfig, Subscription } from "./types";
+
+export function createClient(
+  config: Subscription & GlobalConfig,
+  client: AxiosInstance = axios.create()
+): AxiosInstance {
+  client.defaults.baseURL = config.baseUrl;
+  client.defaults.headers = {
+    "Ocp-Apim-Subscription-Key": config.primaryKey,
+    "X-Target-Environment": config.environment || "sandbox"
+  };
+
+  return client;
 }
 
-export function createOAuthClient(
-  config: Config,
-  authorize: Authorizer
+export function createAuthClient(
+  refresh: TokenRefresher,
+  client: AxiosInstance
 ): AxiosInstance {
-  const instance = createBasicClient(config);
-  const refresh: TokenRefresher = getTokenRefresher(authorize, config);
-
-  instance.interceptors.request.use((request: AxiosRequestConfig) => {
+  client.interceptors.request.use((request: AxiosRequestConfig) => {
     return refresh().then(({ accessToken }) => {
       return {
         ...request,
         headers: {
           ...request.headers,
-          "Authorization": `Bearer ${accessToken}`,
-          "X-Target-Environment": config.environment || "sandbox"
+          Authorization: `Bearer ${accessToken}`
         }
       };
     });
   });
 
-  return instance;
+  return client;
 }

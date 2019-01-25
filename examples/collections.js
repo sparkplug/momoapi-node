@@ -1,11 +1,12 @@
 const momo = require("../lib/");
 
-// initialise the library
-const collections = new momo.Collections({
+const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+
+// initialise collections
+const collections = Collections({
   userSecret: process.env.USER_SECRET,
   userId: process.env.USER_ID,
-  subscriptionKey: process.env.SUBSCRIPTION_KEY,
-  environment: process.env.ENVIRONMENT
+  primaryKey: process.env.PRIMARY_KEY
 });
 
 // Request to pay
@@ -25,18 +26,18 @@ collections
     console.log({ transactionId });
 
     // Get transaction status
-    return collections.getTransactionStatus(transactionId);
+    return collections.getTransaction(transactionId);
   })
-  .then(transactionStatus => {
-    console.log({ transactionStatus });
+  .then(transaction => {
+    console.log({ transaction });
 
     // Get account balance
-    return collections.getAccountBalance();
+    return collections.getBalance();
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response && error.response.data) {
-      console.log(error.response.data);
+    if (error.response) {
+      console.log(error.response.data, error.response.config);
     }
 
     console.log(error.message);
