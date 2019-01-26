@@ -13,10 +13,12 @@ import {
   Config,
   GlobalConfig,
   ProductConfig,
-  Subscription as SubscriptionConfig
+  SubscriptionConfig
 } from "./types";
 
 import Users from "./users";
+
+type MomoClientCreator = (config?: GlobalConfig) => MomoClient;
 
 interface MomoClient {
   Collections(productConfig: ProductConfig): Collections;
@@ -28,34 +30,36 @@ const defaultGlobalConfig: GlobalConfig = {
   environment: "sandbox"
 };
 
-export = function(globalConfig: GlobalConfig = {}): MomoClient {
-  return {
-    Collections(productConfig: ProductConfig) {
-      const config: Config = {
-        ...defaultGlobalConfig,
-        ...globalConfig,
-        ...productConfig
-      };
-      const refresh: TokenRefresher = createTokenRefresher(
-        authorizeCollections,
-        config
-      );
-      const client: AxiosInstance = createAuthClient(
-        refresh,
-        createClient(config)
-      );
+const createMomoClient: MomoClientCreator = (
+  globalConfig: GlobalConfig = {}
+): MomoClient => ({
+  Collections(productConfig: ProductConfig): Collections {
+    const config: Config = {
+      ...defaultGlobalConfig,
+      ...globalConfig,
+      ...productConfig
+    };
+    const refresh: TokenRefresher = createTokenRefresher(
+      authorizeCollections,
+      config
+    );
+    const client: AxiosInstance = createAuthClient(
+      refresh,
+      createClient(config)
+    );
 
-      return new Collections(client);
-    },
+    return new Collections(client);
+  },
 
-    Users(subscriptionConfig: SubscriptionConfig) {
-      const client: AxiosInstance = createClient({
-        ...defaultGlobalConfig,
-        ...globalConfig,
-        ...subscriptionConfig
-      });
+  Users(subscriptionConfig: SubscriptionConfig): Users {
+    const client: AxiosInstance = createClient({
+      ...defaultGlobalConfig,
+      ...globalConfig,
+      ...subscriptionConfig
+    });
 
-      return new Users(client);
-    }
-  };
-};
+    return new Users(client);
+  }
+});
+
+export = createMomoClient;
