@@ -18,14 +18,16 @@ deploy:
     on:
       tags: false
       repo: sparkplug/momoapi-node
+      # TODO switch back to master
       branch: release-0.0.1
 
   - provider: releases
     api_key: "$GITHUB_TOKEN"
     file_glob: true
-    file: "lib"
+    file: "lib/*"
     skip_cleanup: true
     on:
       tags: true
       repo: sparkplug/momoapi-node
+      # TODO switch back to master
       branch: release-0.0.1
