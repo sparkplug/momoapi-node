@@ -2,10 +2,10 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { TokenRefresher } from "./auth";
 
-import { Config, GlobalConfig, Subscription } from "./types";
+import { GlobalConfig, SubscriptionConfig } from "./types";
 
 export function createClient(
-  config: Subscription & GlobalConfig,
+  config: SubscriptionConfig & GlobalConfig,
   client: AxiosInstance = axios.create()
 ): AxiosInstance {
   client.defaults.baseURL = config.baseUrl;

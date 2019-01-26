@@ -10,6 +10,10 @@ export default class Users {
     this.client = client;
   }
 
+  /**
+   * Used to create an API user in the sandbox target environment
+   * @param host The provider callback host
+   */
   public create(host: string): Promise<string> {
     const userId: string = uuid();
     return this.client
@@ -25,6 +29,10 @@ export default class Users {
       .then(() => userId);
   }
 
+  /**
+   * Used to create an API key for an API user in the sandbox target environment.
+   * @param userId
+   */
   public login(userId: string): Promise<Credentials> {
     return this.client
       .post<Credentials>(`/v1_0/apiuser/${userId}/apikey`)
