@@ -6,17 +6,17 @@ import { createClient } from "./client";
 import { Config, UserConfig } from "./types";
 import { AccessToken } from "./types";
 
-export interface OAuthCredentials {
-  accessToken: string;
-  expires: Date;
-}
-
 export type TokenRefresher = () => Promise<OAuthCredentials>;
 
 export type Authorizer = (
   config: Config,
   client?: AxiosInstance
 ) => Promise<AccessToken>;
+
+export interface OAuthCredentials {
+  accessToken: string;
+  expires: Date;
+}
 
 export function createTokenRefresher(
   authorize: Authorizer,

@@ -16,9 +16,9 @@ deploy:
     api_key: "$NPM_TOKEN"
     skip_cleanup: true
     on:
-      tags: true
+      tags: false
       repo: sparkplug/momoapi-node
-      branch: master
+      branch: release-0.0.1
 
   - provider: releases
     api_key: "$GITHUB_TOKEN"
@@ -28,4 +28,4 @@ deploy:
     on:
       tags: true
       repo: sparkplug/momoapi-node
-      branch: master
+      branch: release-0.0.1

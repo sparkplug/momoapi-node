@@ -1,6 +1,6 @@
 export type Config = GlobalConfig & ProductConfig;
 
-export type ProductConfig = Subscription & UserConfig;
+export type ProductConfig = SubscriptionConfig & UserConfig;
 
 export interface GlobalConfig {
   /**
@@ -23,7 +23,7 @@ export interface GlobalConfig {
   environment?: Environment;
 }
 
-export interface Subscription {
+export interface SubscriptionConfig {
   /**
    * Subscription key which provides access to this API. Found in your Profile
    */
@@ -154,7 +154,7 @@ export interface Transaction {
    */
   payeeNote: string;
 
-  reason: TransactionFailureReason;
+  reason: TransactionFailure;
 
   status: TransactionStatus;
 }
@@ -183,12 +183,12 @@ export type PartyIdType = "MSISDN" | "EMAIL" | "PARTY_CODE";
 
 export type Environment = "sandbox" | "production";
 
-export interface TransactionFailureReason {
-  type: TransactionFailureReasonType;
+export interface TransactionFailure {
+  type: TransactionFailureType;
   message: string;
 }
 
-export enum TransactionFailureReasonType {
+export enum TransactionFailureType {
   payeeNotFound = "PAYEE_NOT_FOUND",
   payerNotFound = "PAYER_NOT_FOUND",
   notAllowed = "NOT_ALLOWED",
@@ -208,5 +208,4 @@ export enum TransactionFailureReasonType {
   resourceAlreadyExist = "RESOURCE_ALREADY_EXIST"
 }
 
-// TODO: Get all valid transaction statuses
 export type TransactionStatus = "SUCCESSFUL" | "PENDING" | "FAILED";

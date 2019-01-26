@@ -1,8 +1,9 @@
 {
   "name": "mtn-momo",
-  "version": "0.0.0",
-  "description": "MTN Momo API Client for NodeJS written in TypeScript",
+  "version": "0.0.1-beta-1",
+  "description": "MTN Mobile Money API Client for NodeJS written in TypeScript",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "clean": "rm -r lib",
     "compile": "tsc -p tsconfig.json",
@@ -16,7 +17,6 @@
     "TypeScript",
     "NodeJS"
   ],
-  "author": "Kaamuli Anthony Eriya",
   "bin": {
     "momo-sandbox": "./lib/cli.js"
   },
