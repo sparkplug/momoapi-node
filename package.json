@@ -1,6 +1,6 @@
 {
   "name": "mtn-momo",
-  "version": "0.0.1-beta-1",
+  "version": "0.0.1-beta-2",
   "description": "MTN Mobile Money API Client for NodeJS written in TypeScript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -44,5 +44,16 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparkplug/momoapi-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sparkplug/momoapi-node/issues"
+  },
+  "homepage": "https://github.com/sparkplug/momoapi-node#readme"
 }
