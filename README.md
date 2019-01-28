@@ -3,6 +3,8 @@
 MTN MoMo API Client for Node JS.
 
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-node.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-node)
+[![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
+![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
 
 ## Usage
 
@@ -32,16 +34,16 @@ If all goes well, it will print something like this in your terminal;
 
 ```sh
 Momo Sandbox Credentials {
-  "userSecret": "b2e23bf4e3984a16a55dbfc2d45f66b0",
-  "userId": "8ecc7cf3-0db8-4013-9c7b-da4894460041"
+  "userSecret": "your api key",
+  "userId": "your user id"
 }
 ```
 
-You can use those values when developing against the sandbox. When ready to go live, 
+You can use those values when developing against the sandbox. When ready to go live, you will be provided with the values to use in production
 
 ## Configuration
 
-Before you can use collections, and later disbursements, you need to create an instance of the client. This library exports a function that returns the client given global configuration;
+Before you can use collections, you need to create an instance of the client. This library exports a function that returns the client given global configuration;
 
 ```js
 const momo = require("mtn-momo");
@@ -49,10 +51,10 @@ const momo = require("mtn-momo");
 const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
 ```
 
-The global configuration must contain the following;
+The global configuration consists of the following;
 
-- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
-- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox by default
+- `baseUrl`: An optional base url to the MTN Momo API. By default the sandbox base url will be used
+- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox is used by default
 - `callbackHost`: The domain where you webhooks urls are hosted;
 
 
@@ -60,7 +62,7 @@ The global configuration must contain the following;
 
 The collections client can be created with the following paramaters;
 
-- `subscriptionKey`: Find this on the MTN Momo API dashboard
+- `primaryKey`: Find this on the MTN Momo API dashboard
 - `userId`: For production, find your Collections User ID on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
 - `userSecret`: For production, find your Collections User Secret on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
 
@@ -74,7 +76,7 @@ const collections = Collections({
 });
 ```
 
-#### Methods
+### Methods
 
 1. `requestToPay(request: PaymentRequest): Promise<string>`
 
@@ -84,7 +86,7 @@ This method inititates a payment. The user can then authorise to it with their P
 
 3. `getAccountBalance(): Promise<AccountBalance>`
 
-#### Sample Code
+### Sample Code
 
 ```js
 const momo = require("mtn-momo");
