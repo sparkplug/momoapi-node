@@ -3,6 +3,8 @@
 MTN MoMo API Client for Node JS.
 
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-node.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-node)
+[![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
+![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
 
 ## Usage
 
