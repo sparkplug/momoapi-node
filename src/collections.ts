@@ -16,7 +16,7 @@ export default class Collections {
   }
 
   /**
-   * This operation is used to request a payment from a consumer (Payer).
+   * This method is used to request a payment from a consumer (Payer).
    * The payer will be asked to authorize the payment. The transaction will
    * be executed once the payer has authorized the payment.
    * The requesttopay will be in status PENDING until the transaction
@@ -41,9 +41,9 @@ export default class Collections {
   }
 
   /**
-   * This operation is used to get the status of a request to pay.
+   * This method is used to get the Transaction object.
    *
-   * @param referenceId the value returned from `getTransactionStatus`
+   * @param referenceId the value returned from `requestToPay`
    */
   public getTransaction(referenceId: string): Promise<Transaction> {
     return this.client
@@ -61,7 +61,7 @@ export default class Collections {
   }
 
   /**
-   * Operation is used to check if an account holder is registered and active in the system.
+   * This method is used to check if an account holder is registered and active in the system.
    *
    * @param id Specifies the type of the party ID. Allowed values [msisdn, email, party_code].
    *   accountHolderId should explicitly be in small letters.

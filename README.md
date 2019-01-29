@@ -11,24 +11,19 @@ MTN MoMo API Client for Node JS.
 Add the library to your project
 
 ```sh
-npm install mtn-momo
+npm install mtn-momo --save-dev
 ```
 
 ## Sandbox Credentials
 
-To get sandbox credentials; install the package globally and run the `momo-sandbox` command or install the package locally to your project and run `momo-sandbox` with the `npx` command.
+Next, we need to get the `User ID` and `User Secret` and to do this we shall need to use the `Primary Key` for the `Product` to which we are subscribed, as well as specify a `host`. We run the `momo-sandbox` as below.
 
 ```sh
 ## Within a project
-npm install --save momoapi-node
 npx momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
-
-## Globally
-npm install --global momoapi-node
-momo-sandbox --host example.com --primary-key 23e2r2er2342blahblah
 ```
 
-If all goes well, it will print something like this in your terminal;
+If all goes well, it will print the credentials on the terminal;
 
 ```sh
 Momo Sandbox Credentials {
@@ -37,11 +32,17 @@ Momo Sandbox Credentials {
 }
 ```
 
-You can use those values when developing against the sandbox. When ready to go live, 
+These are the credentials we shall use for the `sandbox` environment. In production, these credentials are provided for you on the MTN OVA management dashboard after KYC requirements are met.
 
 ## Configuration
 
-Before you can use collections, and later disbursements, you need to create an instance of the client. This library exports a function that returns the client given global configuration;
+Before we can fully utilize the library, we need to specify global configurations. The global configuration must contain the following:
+
+- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
+- `environment`: Optional enviroment, either "sandbox" or "production". Default is 'sandbox'
+- `callbackHost`: The domain where you webhooks urls are hosted. This is mandatory.
+
+As an example, you might configure the library like this:
 
 ```js
 const momo = require("mtn-momo");
@@ -49,22 +50,17 @@ const momo = require("mtn-momo");
 const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
 ```
 
-The global configuration must contain the following;
-
-- `baseUrl`: An optional base url to the MTN Momo API. By default the staging base url will be used
-- `environment`: Optional enviroment, either "sandbox" or "production". Sandbox by default
-- `callbackHost`: The domain where you webhooks urls are hosted;
-
+Currently, the library only supports `Collections`. Let us create a client with the previously generated credentials for the `Collections` product.
 
 ## Collections
 
-The collections client can be created with the following paramaters;
+The collections client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
 
-- `subscriptionKey`: Find this on the MTN Momo API dashboard
-- `userId`: For production, find your Collections User ID on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
-- `userSecret`: For production, find your Collections User Secret on MTN Momo API dashboard. For sandbox, use the one generated with the `momo-sandbox` command for sandbox
+- `primaryKey`: Primary Key for the `Collections` product.
+- `userId`: For sandbox, use the one generated with the `momo-sandbox` command.
+- `userSecret`: For sandbox, use the one generated with the `momo-sandbox` command.
 
-You can create a collections client with the following;
+You can create a collections client with the following
 
 ```js
 const collections = Collections({
@@ -78,11 +74,19 @@ const collections = Collections({
 
 1. `requestToPay(request: PaymentRequest): Promise<string>`
 
-This method inititates a payment. The user can then authorise to it with their PIN. It returns a promise that resolves the transaction id. You can use the transaction id to check the transaction status, check the nmethod below.
+This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
 
-2. `getTransactionStatus(transactionId: string): Promise<Transaction>`
+2. `getTransaction(transactionId: string): Promise<Transaction>`
 
-3. `getAccountBalance(): Promise<AccountBalance>`
+This method is used to get the Transaction object.
+
+3. `getBalance(): Promise<AccountBalance>`
+
+Get the balance of the account.
+
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<any>`
+
+This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
@@ -132,14 +136,4 @@ collections
   });
 ```
 
-## Development
 
-Clone this repository and compile
-
-```sh
-git clone git@github.com:sparkplug/momoapi-node.git
-cd momoapi-node
-npm install
-npm run compile
-npm link # to test and develop the cli tool locally
-```
