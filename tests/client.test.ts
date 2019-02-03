@@ -4,12 +4,11 @@ import { createAuthClient, createClient } from "../src/client";
 import { expect } from "./chai";
 import { createMock } from "./mock";
 
-import { OAuthCredentials } from "../src/auth";
-import { Config } from "../src/types";
+import { Config, Environment } from "../src/types";
 
 describe("Client", function() {
   const config: Config = {
-    environment: "sandbox",
+    environment: Environment.SANDBOX,
     baseUrl: "test",
     primaryKey: "key",
     userId: "id",
@@ -49,10 +48,7 @@ describe("Client", function() {
   describe("createAuthClient", function() {
     it("makes requests with the right headers", function() {
       const [mockClient, mockAdapter] = createMock();
-      const refresher = sinon.fake.resolves({
-        accessToken: "token",
-        expires: new Date()
-      }as OAuthCredentials);
+      const refresher = sinon.fake.resolves("token");
       const client = createAuthClient(refresher, mockClient);
       return expect(client.get("/test")).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.get[0].headers).to.have.deep.property(

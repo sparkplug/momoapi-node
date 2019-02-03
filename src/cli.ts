@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
+import { AxiosError } from "axios";
 import program from "commander";
 
 import momo from "./";
-
 import { Credentials } from "./types";
 
 const { version } = require("../package.json");
@@ -15,9 +15,9 @@ program
   .option("-p, --primary-key <n>", "Primary Key")
   .parse(process.argv);
 
-const stringify = (obj: object) => JSON.stringify(obj, null, 2);
+const stringify = (obj: object | string) => JSON.stringify(obj, null, 2);
 
-const { Users } = momo();
+const { Users } = momo({ callbackHost: program.host });
 
 const users = Users({ primaryKey: program.primaryKey });
 
@@ -34,7 +34,7 @@ users
       );
     });
   })
-  .catch(error => {
+  .catch((error: AxiosError) => {
     let message: string = stringify(error.message);
 
     if (error.response && error.response.data) {

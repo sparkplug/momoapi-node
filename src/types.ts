@@ -84,7 +84,7 @@ export interface PaymentRequest {
    * The external id will be included in transaction history report.
    * External id is not required to be unique.
    */
-  externalId: string;
+  externalId?: string;
 
   /**
    * Party identifies a account holder in the wallet platform.
@@ -99,12 +99,12 @@ export interface PaymentRequest {
   /**
    * Message that will be written in the payer transaction history message field.
    */
-  payerMessage: string;
+  payerMessage?: string;
 
   /**
    * Message that will be written in the payee transaction history note field.
    */
-  payeeNote: string;
+  payeeNote?: string;
 
   /**
    * URL to the server where the callback should be sent.
@@ -179,9 +179,16 @@ export interface Payer {
   partyId: string;
 }
 
-export type PartyIdType = "MSISDN" | "EMAIL" | "PARTY_CODE";
+export enum PartyIdType {
+  MSISDN = "MSISDN",
+  EMAIL = "EMAIL",
+  PARTY_CODE = "PARTY_CODE"
+}
 
-export type Environment = "sandbox" | "production";
+export enum Environment {
+  SANDBOX = "sandbox",
+  PRODUCTION = "production"
+}
 
 export interface TransactionFailure {
   type: TransactionFailureType;
@@ -208,4 +215,8 @@ export enum TransactionFailureType {
   resourceAlreadyExist = "RESOURCE_ALREADY_EXIST"
 }
 
-export type TransactionStatus = "SUCCESSFUL" | "PENDING" | "FAILED";
+export enum TransactionStatus {
+  SUCCESSFUL = "SUCCESSFUL",
+  PENDING = "PENDING",
+  FAILED = "FAILED"
+}

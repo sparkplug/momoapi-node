@@ -7,6 +7,7 @@ import {
   PaymentRequest,
   Transaction
 } from "./types";
+import { validateRequestToPay } from "./validate";
 
 export default class Collections {
   private client: AxiosInstance;
@@ -29,15 +30,17 @@ export default class Collections {
     callbackUrl,
     ...paymentRequest
   }: PaymentRequest): Promise<string> {
-    const referenceId: string = uuid();
-    return this.client
-      .post<void>("/collection/v1_0/requesttopay", paymentRequest, {
-        headers: {
-          "X-Reference-Id": referenceId,
-          ...(callbackUrl ? { "X-Callback-Url": callbackUrl } : {})
-        }
-      })
-      .then(() => referenceId);
+    return validateRequestToPay(paymentRequest).then(() => {
+      const referenceId: string = uuid();
+      return this.client
+        .post<void>("/collection/v1_0/requesttopay", paymentRequest, {
+          headers: {
+            "X-Reference-Id": referenceId,
+            ...(callbackUrl ? { "X-Callback-Url": callbackUrl } : {})
+          }
+        })
+        .then(() => referenceId);
+    });
   }
 
   /**
@@ -71,7 +74,10 @@ export default class Collections {
    *   email - Validated to be a valid e-mail format. Validated with IsEmail
    *   party_code - UUID of the party. Validated with IsUuid
    */
-  public isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<any> {
+  public isPayerActive(
+    id: string,
+    type: PartyIdType = PartyIdType.MSISDN
+  ): Promise<any> {
     return this.client
       .get(`/collection/v1_0/accountholder/${type}/${id}/active`)
       .then(response => response.data);
