@@ -9,11 +9,11 @@ import {
 } from "../src/auth";
 import { createMock } from "./mock";
 
-import { AccessToken, Config } from "../src/types";
+import { AccessToken, Config, Environment } from "../src/types";
 
 describe("Auth", function() {
   const config: Config = {
-    environment: "sandbox",
+    environment: Environment.sandbox,
     baseUrl: "test",
     primaryKey: "key",
     userId: "id",

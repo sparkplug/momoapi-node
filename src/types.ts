@@ -181,7 +181,10 @@ export interface Payer {
 
 export type PartyIdType = "MSISDN" | "EMAIL" | "PARTY_CODE";
 
-export type Environment = "sandbox" | "production";
+export enum Environment {
+  sandbox = "sandbox",
+  production = "production"
+}
 
 export interface TransactionFailure {
   type: TransactionFailureType;

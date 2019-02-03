@@ -2,23 +2,23 @@ import { AxiosInstance } from "axios";
 
 import Collections from "./collections";
 
-import {
-  authorizeCollections,
-  createTokenRefresher,
-  TokenRefresher
-} from "./auth";
+import { authorizeCollections, createTokenRefresher } from "./auth";
 import { createAuthClient, createClient } from "./client";
+import {
+  validateGlobalConfig,
+  validateProductConfig,
+  validateSubscriptionConfig
+} from "./validate";
 
 import {
   Config,
+  Environment,
   GlobalConfig,
   ProductConfig,
   SubscriptionConfig
 } from "./types";
 
 import Users from "./users";
-
-type MomoClientCreator = (config?: GlobalConfig) => MomoClient;
 
 interface MomoClient {
   Collections(productConfig: ProductConfig): Collections;
@@ -27,39 +27,42 @@ interface MomoClient {
 
 const defaultGlobalConfig: GlobalConfig = {
   baseUrl: "https://ericssonbasicapi2.azure-api.net",
-  environment: "sandbox"
+  environment: Environment.sandbox
 };
 
-const createMomoClient: MomoClientCreator = (
-  globalConfig: GlobalConfig = {}
-): MomoClient => ({
-  Collections(productConfig: ProductConfig): Collections {
-    const config: Config = {
-      ...defaultGlobalConfig,
-      ...globalConfig,
-      ...productConfig
-    };
-    const refresh: TokenRefresher = createTokenRefresher(
-      authorizeCollections,
-      config
-    );
-    const client: AxiosInstance = createAuthClient(
-      refresh,
-      createClient(config)
-    );
+export = (globalConfig: GlobalConfig): MomoClient => {
+  validateGlobalConfig(globalConfig);
 
-    return new Collections(client);
-  },
+  return {
+    Collections(productConfig: ProductConfig): Collections {
+      validateProductConfig(productConfig);
 
-  Users(subscriptionConfig: SubscriptionConfig): Users {
-    const client: AxiosInstance = createClient({
-      ...defaultGlobalConfig,
-      ...globalConfig,
-      ...subscriptionConfig
-    });
+      const config: Config = {
+        ...defaultGlobalConfig,
+        ...globalConfig,
+        ...productConfig
+      };
 
-    return new Users(client);
-  }
-});
+      const client: AxiosInstance = createAuthClient(
+        createTokenRefresher(authorizeCollections, config),
+        createClient(config)
+      );
 
-export = createMomoClient;
+      return new Collections(client);
+    },
+
+    Users(subscriptionConfig: SubscriptionConfig): Users {
+      validateSubscriptionConfig(subscriptionConfig);
+
+      const config: GlobalConfig & SubscriptionConfig = {
+        ...defaultGlobalConfig,
+        ...globalConfig,
+        ...subscriptionConfig
+      };
+
+      const client: AxiosInstance = createClient(config);
+
+      return new Users(client);
+    }
+  };
+};

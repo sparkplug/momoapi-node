@@ -22,7 +22,7 @@ export function createAuthClient(
   client: AxiosInstance
 ): AxiosInstance {
   client.interceptors.request.use((request: AxiosRequestConfig) => {
-    return refresh().then(({ accessToken }) => {
+    return refresh().then(accessToken => {
       return {
         ...request,
         headers: {

@@ -3,17 +3,16 @@ import moment from "moment";
 
 import { createClient } from "./client";
 
-import { Config, UserConfig } from "./types";
-import { AccessToken } from "./types";
+import { AccessToken, Config, UserConfig } from "./types";
 
-export type TokenRefresher = () => Promise<OAuthCredentials>;
+export type TokenRefresher = () => Promise<string>;
 
 export type Authorizer = (
   config: Config,
   client?: AxiosInstance
 ) => Promise<AccessToken>;
 
-export interface OAuthCredentials {
+interface OAuthCredentials {
   accessToken: string;
   expires: Date;
 }
@@ -37,11 +36,11 @@ export function createTokenRefresher(
         })
         .then(freshCredentials => {
           credentials = freshCredentials;
-          return credentials;
+          return credentials.accessToken;
         });
     }
 
-    return Promise.resolve(credentials);
+    return Promise.resolve(credentials.accessToken);
   };
 }
 
