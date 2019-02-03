@@ -1,11 +1,13 @@
 import { AssertionError } from "assert";
 import uuid from "uuid/v4";
 
+import { PaymentRequest } from "../src/types";
 import { expect } from "./chai";
 
 import {
   validateGlobalConfig,
   validateProductConfig,
+  validateRequestToPay,
   validateSubscriptionConfig,
   validateUserConfig
 } from "../src/validate";
@@ -30,32 +32,7 @@ describe("Validate", function() {
     });
 
     context("when environment is specified", function() {
-      context("and it's not valid", function() {
-        it("thows an error", function() {
-          expect(
-            validateGlobalConfig.bind(null, {
-              callbackHost: "example.com",
-              environment: "test"
-            })
-          ).to.throw(
-            AssertionError,
-            "environment must be either sandbox or production"
-          );
-        });
-      });
-
-      context("and it's valid", function() {
-        it("thows an error", function() {
-          expect(
-            validateGlobalConfig.bind(null, {
-              callbackHost: "example.com",
-              environment: "sandbox"
-            })
-          ).to.not.throw();
-        });
-      });
-
-      context("and is production", function() {
+      context("and is not sandbox", function() {
         context("and baseUrl is not specified", function() {
           it("throws", function() {
             expect(
@@ -70,7 +47,7 @@ describe("Validate", function() {
           });
         });
 
-        context("and baseUrl isu specified", function() {
+        context("and baseUrl is specified", function() {
           it("doesn't throw", function() {
             expect(
               validateGlobalConfig.bind(null, {
@@ -199,6 +176,77 @@ describe("Validate", function() {
             userSecret: "test user secret"
           })
         ).to.not.throw();
+      });
+    });
+  });
+
+  describe("validateRequestToPay", function() {
+    context("when the amount is missing", function() {
+      it("throws an error", function() {
+        const request = {} as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "amount is required"
+        );
+      });
+    });
+
+    context("when the amount is not numeric", function() {
+      it("throws an error", function() {
+        const request = { amount: "alphabetic" } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "amount must be a number"
+        );
+      });
+    });
+
+    context("when the currency is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000"
+        } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "currency is required"
+        );
+      });
+    });
+
+    context("when the payer is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX"
+        } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "payer is required"
+        );
+      });
+    });
+
+    context("when the party id is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payer: {}
+        } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "payer.partyId is required"
+        );
+      });
+    });
+
+    context("when the party id type is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payer: {
+            partyId: "xxx"
+          }
+        } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.rejectedWith(
+          "payer.partyIdType is required"
+        );
       });
     });
   });

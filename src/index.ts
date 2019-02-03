@@ -27,7 +27,7 @@ interface MomoClient {
 
 const defaultGlobalConfig: GlobalConfig = {
   baseUrl: "https://ericssonbasicapi2.azure-api.net",
-  environment: Environment.sandbox
+  environment: Environment.SANDBOX
 };
 
 export = (globalConfig: GlobalConfig): MomoClient => {

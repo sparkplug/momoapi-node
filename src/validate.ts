@@ -1,4 +1,5 @@
 import { strictEqual } from "assert";
+
 import {
   Environment,
   GlobalConfig,
@@ -8,28 +9,30 @@ import {
   UserConfig
 } from "./types";
 
-export function validateRequestToPay(paymentRequest: PaymentRequest) {
-  const {
-    amount,
-    currency,
-    callbackUrl,
-    externalId,
-    payer,
-    payeeNote,
-    payerMessage
-  }: PaymentRequest = paymentRequest;
+export function validateRequestToPay(
+  paymentRequest: PaymentRequest
+): Promise<void> {
+  const { amount, currency, payer }: PaymentRequest = paymentRequest || {};
+  return Promise.resolve().then(() => {
+    strictEqual(isTruthy(amount), true, "amount is required");
+    strictEqual(isNumeric(amount), true, "amount must be a number");
+    strictEqual(isTruthy(currency), true, "currency is required");
+    strictEqual(isTruthy(payer), true, "payer is required");
+    strictEqual(isTruthy(payer.partyId), true, "payer.partyId is required");
+    strictEqual(
+      isTruthy(payer.partyIdType),
+      true,
+      "payer.partyIdType is required"
+    );
+    strictEqual(isString(currency), true, "amount must be a string");
+  });
 }
 
 export function validateGlobalConfig(config: GlobalConfig): void {
   const { callbackHost, baseUrl, environment } = config;
   strictEqual(isTruthy(callbackHost), true, "callbackHost is required");
 
-  if (environment && environment !== Environment.sandbox) {
-    strictEqual(
-      isValidEnvironment(environment),
-      true,
-      "environment must be either sandbox or production"
-    );
+  if (environment && environment !== Environment.SANDBOX) {
     strictEqual(
       isTruthy(baseUrl),
       true,
@@ -76,8 +79,4 @@ function isUuid4(value: string): boolean {
   return /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     value
   );
-}
-
-function isValidEnvironment(value: string): boolean {
-  return isTruthy(Environment[value as Environment]);
 }

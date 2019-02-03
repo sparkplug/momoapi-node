@@ -13,7 +13,7 @@ import { AccessToken, Config, Environment } from "../src/types";
 
 describe("Auth", function() {
   const config: Config = {
-    environment: Environment.sandbox,
+    environment: Environment.SANDBOX,
     baseUrl: "test",
     primaryKey: "key",
     userId: "id",
