@@ -59,7 +59,7 @@ export interface AccessToken {
    *
    * TODO: Find list of complete token types
    */
-  token_type: "access_token" | string;
+  token_type: string;
 
   /**
    * The validity time in seconds of the token
@@ -67,102 +67,10 @@ export interface AccessToken {
   expires_in: number;
 }
 
-export interface PaymentRequest {
-  /**
-   * Amount that will be debited from the payer account
-   */
-  amount: string;
-
-  /**
-   * ISO4217 Currency
-   */
-  currency: string;
-
-  /**
-   * External id is used as a reference to the transaction.
-   * External id is used for reconciliation.
-   * The external id will be included in transaction history report.
-   * External id is not required to be unique.
-   */
-  externalId?: string;
-
-  /**
-   * Party identifies a account holder in the wallet platform.
-   * Party consists of two parameters, type and partyId.
-   * Each type have its own validation of the partyId
-   *   - MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
-   *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
-   *   - PARTY_CODE - UUID of the party. Validated with IsUuid
-   */
-  payer: Payer;
-
-  /**
-   * Message that will be written in the payer transaction history message field.
-   */
-  payerMessage?: string;
-
-  /**
-   * Message that will be written in the payee transaction history note field.
-   */
-  payeeNote?: string;
-
-  /**
-   * URL to the server where the callback should be sent.
-   */
-  callbackUrl?: string;
-}
-
-export interface Transaction {
-  /**
-   * Financial transactionIdd from mobile money manager.
-   * Used to connect to the specific financial transaction made in the account
-   */
-  financialTransactionId: string;
-
-  /**
-   * External id provided in the creation of the requestToPay transaction
-   */
-  externalId: string;
-
-  /**
-   * Amount that will be debited from the payer account.
-   */
-  amount: string;
-
-  /**
-   * ISO4217 Currency
-   */
-  currency: string;
-
-  /**
-   * Party identifies a account holder in the wallet platform.
-   * Party consists of two parameters, type and partyId.
-   * Each type have its own validation of the partyId
-   *   - MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
-   *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
-   *   - PARTY_CODE - UUID of the party. Validated with IsUuid
-   */
-  payer: Payer;
-
-  /**
-   * Message that will be written in the payer transaction history message field.
-   */
-  payerMessage: string;
-
-  /**
-   * Message that will be written in the payee transaction history note field.
-   */
-  payeeNote: string;
-
-  reason: TransactionFailure;
-
-  status: TransactionStatus;
-}
-
 /**
  * The available balance of the account
  */
-export interface AccountBalance {
+export interface Balance {
   /**
    * The available balance of the account
    */
@@ -190,12 +98,13 @@ export enum Environment {
   PRODUCTION = "production"
 }
 
-export interface TransactionFailure {
-  type: TransactionFailureType;
-  message: string;
+export enum TransactionStatus {
+  SUCCESSFUL = "SUCCESSFUL",
+  PENDING = "PENDING",
+  FAILED = "FAILED"
 }
 
-export enum TransactionFailureType {
+export enum FailureReasonType {
   payeeNotFound = "PAYEE_NOT_FOUND",
   payerNotFound = "PAYER_NOT_FOUND",
   notAllowed = "NOT_ALLOWED",
@@ -213,10 +122,4 @@ export enum TransactionFailureType {
   expired = "EXPIRED",
   transactionCancelled = "TRANSACTION_CANCELED",
   resourceAlreadyExist = "RESOURCE_ALREADY_EXIST"
-}
-
-export enum TransactionStatus {
-  SUCCESSFUL = "SUCCESSFUL",
-  PENDING = "PENDING",
-  FAILED = "FAILED"
 }

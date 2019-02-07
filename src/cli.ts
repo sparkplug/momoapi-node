@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import program from "commander";
 
 import momo from "./";
-import { Credentials } from "./types";
+import { Credentials } from "./common";
 
 const { version } = require("../package.json");
 

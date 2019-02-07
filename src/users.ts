@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import uuid from "uuid/v4";
 
-import { Credentials } from "./types";
+import { Credentials } from "./common";
 
 export default class Users {
   private client: AxiosInstance;

@@ -1,8 +1,14 @@
 import { AxiosInstance } from "axios";
 
 import Collections from "./collections";
+import Disbursements from "./disbursements";
+import Users from "./users";
 
-import { authorizeCollections, createTokenRefresher } from "./auth";
+import {
+  authorizeCollections,
+  authorizeDisbursements,
+  createTokenRefresher,
+} from "./auth";
 import { createAuthClient, createClient } from "./client";
 import {
   validateGlobalConfig,
@@ -16,12 +22,11 @@ import {
   GlobalConfig,
   ProductConfig,
   SubscriptionConfig
-} from "./types";
-
-import Users from "./users";
+} from "./common";
 
 interface MomoClient {
   Collections(productConfig: ProductConfig): Collections;
+  Disbursements(productConfig: ProductConfig): Disbursements;
   Users(subscription: SubscriptionConfig): Users;
 }
 
@@ -47,8 +52,22 @@ export = (globalConfig: GlobalConfig): MomoClient => {
         createTokenRefresher(authorizeCollections, config),
         createClient(config)
       );
-
       return new Collections(client);
+    },
+
+    Disbursements(productConfig: ProductConfig): Disbursements {
+      const config: Config = {
+        ...defaultGlobalConfig,
+        ...globalConfig,
+        ...productConfig
+      };
+
+      const client: AxiosInstance = createAuthClient(
+        createTokenRefresher(authorizeDisbursements, config),
+        createClient(config)
+      );
+
+      return new Disbursements(client);
     },
 
     Users(subscriptionConfig: SubscriptionConfig): Users {

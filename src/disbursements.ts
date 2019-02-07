@@ -5,14 +5,13 @@ import {
   Balance,
   FailureReasonType,
   PartyIdType,
-  Payer,
-  TransactionStatus,
+  TransactionStatus
 } from "./common";
-import { validateRequestToPay } from "./validate";
+import { validateTransfer } from "./validate";
 
-export interface PaymentRequest {
+export interface TransferRequest {
   /**
-   * Amount that will be debited from the payer account
+   * Amount that will be debited from the payer account.
    */
   amount: string;
 
@@ -33,40 +32,30 @@ export interface PaymentRequest {
    * Party identifies a account holder in the wallet platform.
    * Party consists of two parameters, type and partyId.
    * Each type have its own validation of the partyId
-   *   - MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
-   *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
-   *   - PARTY_CODE - UUID of the party. Validated with IsUuid
+   *   MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
+   *   EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
+   *   PARTY_CODE - UUID of the party. Validated with IsUuid
    */
-  payer: Payer;
+  payee: {
+    partyIdType: PartyIdType;
+    partyId: string;
+  };
 
   /**
    * Message that will be written in the payer transaction history message field.
    */
   payerMessage?: string;
-
   /**
    * Message that will be written in the payee transaction history note field.
    */
   payeeNote?: string;
-
   /**
    * URL to the server where the callback should be sent.
    */
   callbackUrl?: string;
 }
 
-export interface Payment {
-  /**
-   * Financial transactionIdd from mobile money manager.
-   * Used to connect to the specific financial transaction made in the account
-   */
-  financialTransactionId: string;
-
-  /**
-   * External id provided in the creation of the requestToPay transaction
-   */
-  externalId: string;
-
+export interface Transfer {
   /**
    * Amount that will be debited from the payer account.
    */
@@ -78,34 +67,39 @@ export interface Payment {
   currency: string;
 
   /**
+   * Financial transactionIdd from mobile money manager.
+   * Used to connect to the specific financial transaction made in the account
+   */
+  financialTransactionId: string;
+
+  /**
+   * External id is used as a reference to the transaction.
+   * External id is used for reconciliation.
+   * The external id will be included in transaction history report.
+   * External id is not required to be unique.
+   */
+  externalId: string;
+
+  /**
    * Party identifies a account holder in the wallet platform.
    * Party consists of two parameters, type and partyId.
    * Each type have its own validation of the partyId
-   *   - MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
-   *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
-   *   - PARTY_CODE - UUID of the party. Validated with IsUuid
+   *   MSISDN - Mobile Number validated according to ITU-T E.164. Validated with IsMSISDN
+   *   EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
+   *   PARTY_CODE - UUID of the party. Validated with IsUuid
    */
-  payer: Payer;
-
-  /**
-   * Message that will be written in the payer transaction history message field.
-   */
-  payerMessage: string;
-
-  /**
-   * Message that will be written in the payee transaction history note field.
-   */
-  payeeNote: string;
-
+  payee: {
+    partyIdType: "MSISDN";
+    partyId: string;
+  };
+  status: TransactionStatus;
   reason?: {
     type: FailureReasonType;
     message: string;
   };
-
-  status: TransactionStatus;
 }
 
-export default class Collections {
+export default class Disbursements {
   private client: AxiosInstance;
 
   constructor(client: AxiosInstance) {
@@ -113,23 +107,20 @@ export default class Collections {
   }
 
   /**
-   * This method is used to request a payment from a consumer (Payer).
-   * The payer will be asked to authorize the payment. The transaction will
-   * be executed once the payer has authorized the payment.
-   * The requesttopay will be in status PENDING until the transaction
-   * is authorized or declined by the payer or it is timed out by the system.
-   * Status of the transaction can be validated by using `getTransation`
+   * Transfer operation is used to transfer an amount from the owner’s
+   * account to a payee account.
+   * Status of the transaction can be validated by using the
    *
    * @param paymentRequest
    */
-  public requestToPay({
+  public transfer({
     callbackUrl,
-    ...paymentRequest
-  }: PaymentRequest): Promise<string> {
-    return validateRequestToPay(paymentRequest).then(() => {
+    ...payoutRequest
+  }: TransferRequest): Promise<string> {
+    return validateTransfer(payoutRequest).then(() => {
       const referenceId: string = uuid();
       return this.client
-        .post<void>("/collection/v1_0/requesttopay", paymentRequest, {
+        .post<void>("/disbursement/v1_0/transfer", payoutRequest, {
           headers: {
             "X-Reference-Id": referenceId,
             ...(callbackUrl ? { "X-Callback-Url": callbackUrl } : {})
@@ -142,11 +133,11 @@ export default class Collections {
   /**
    * This method is used to get the Transaction object.
    *
-   * @param referenceId the value returned from `requestToPay`
+   * @param referenceId the value returned from `transfer`
    */
-  public getTransaction(referenceId: string): Promise<Payment> {
+  public getTransaction(referenceId: string): Promise<Transfer> {
     return this.client
-      .get<Payment>(`/collection/v1_0/requesttopay/${referenceId}`)
+      .get<Transfer>(`/disbursement/v1_0/transfer/${referenceId}`)
       .then(response => response.data);
   }
 
@@ -155,7 +146,7 @@ export default class Collections {
    */
   public getBalance(): Promise<Balance> {
     return this.client
-      .get<Balance>("/collection/v1_0/account/balance")
+      .get<Balance>("/disbursement/v1_0/account/balance")
       .then(response => response.data);
   }
 
@@ -175,7 +166,7 @@ export default class Collections {
     type: PartyIdType = PartyIdType.MSISDN
   ): Promise<string> {
     return this.client
-      .get<string>(`/collection/v1_0/accountholder/${type}/${id}/active`)
+      .get<string>(`/disbursement/v1_0/accountholder/${type}/${id}/active`)
       .then(response => response.data);
   }
 }
