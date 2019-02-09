@@ -74,19 +74,19 @@ const collections = Collections({
 
 1. `requestToPay(request: PaymentRequest): Promise<string>`
 
-This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
+  This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
 
 2. `getTransaction(transactionId: string): Promise<Payment>`
 
-This method is used to get the payment including status and all information from the request. Use the `transactionId` returned from `requestToPay` 
+  This method is used to get the payment including status and all information from the request. Use the `transactionId` returned from `requestToPay` 
 
 3. `getBalance(): Promise<Balance>`
 
-Get the balance of the account.
+  Get the balance of the account.
 
 4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
 
-This method is used to check if an account holder is registered and active in the system.
+  This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
@@ -158,19 +158,19 @@ const disbursements = Disbursements({
 
 1. `transfer(request: TransferRequest): Promise<string>`
 
-Transfer operation is used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
+  Used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
 
 2. `getTransaction(transactionId: string): Promise<Transfer>`
 
-This method is used to get the transfer object including status and all information from the request. Use the reference id returned from  `transfer`
+  This method is used to get the transfer object including status and all information from the request. Use the reference id returned from  `transfer`
 
 3. `getBalance(): Promise<Balance>`
 
-Get the balance of the account.
+  Get the balance of the account.
 
 4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
 
-This method is used to check if an account holder is registered and active in the system.
+  This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
