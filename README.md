@@ -52,8 +52,6 @@ const momo = require("mtn-momo");
 const { Collections, Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
 ```
 
-Currently, the library only supports `Collections`. Let us create a client with the previously generated credentials for the `Collections` product.
-
 ## Collections
 
 The collections client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
@@ -80,7 +78,7 @@ This operation is used to request a payment from a consumer (Payer). The payer w
 
 2. `getTransaction(transactionId: string): Promise<Payment>`
 
-This method is used to get the Transaction object.
+This method is used to get the payment including status and all information from the request. Use the `transactionId` returned from `requestToPay` 
 
 3. `getBalance(): Promise<Balance>`
 
@@ -140,7 +138,7 @@ collections
 
 ## Disbursement
 
-The collections client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
+The disbursements client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
 
 - `primaryKey`: Primary Key for the `Disbursements` product.
 - `userId`: For sandbox, use the one generated with the `momo-sandbox` command.
@@ -164,7 +162,7 @@ Transfer operation is used to transfer an amount from the owner’s account to a
 
 2. `getTransaction(transactionId: string): Promise<Transfer>`
 
-This method is used to get the Transaction object
+This method is used to get the transfer object including status and all information from the request. Use the reference id returned from  `transfer`
 
 3. `getBalance(): Promise<Balance>`
 
