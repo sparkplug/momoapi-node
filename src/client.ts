@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 import { TokenRefresher } from "./auth";
 
-import { GlobalConfig, SubscriptionConfig } from "./types";
+import { GlobalConfig, SubscriptionConfig } from "./common";
 
 export function createClient(
   config: SubscriptionConfig & GlobalConfig,

@@ -49,10 +49,8 @@ As an example, you might configure the library like this:
 ```js
 const momo = require("mtn-momo");
 
-const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections, Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
 ```
-
-Currently, the library only supports `Collections`. Let us create a client with the previously generated credentials for the `Collections` product.
 
 ## Collections
 
@@ -76,19 +74,19 @@ const collections = Collections({
 
 1. `requestToPay(request: PaymentRequest): Promise<string>`
 
-This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
+  This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
 
-2. `getTransaction(transactionId: string): Promise<Transaction>`
+2. `getTransaction(transactionId: string): Promise<Payment>`
 
-This method is used to get the Transaction object.
+  This method is used to get the payment including status and all information from the request. Use the `transactionId` returned from `requestToPay` 
 
-3. `getBalance(): Promise<AccountBalance>`
+3. `getBalance(): Promise<Balance>`
 
-Get the balance of the account.
+  Get the balance of the account.
 
-4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<any>`
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
 
-This method is used to check if an account holder is registered and active in the system.
+  This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
@@ -98,9 +96,9 @@ const momo = require("mtn-momo");
 const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
 
 const collections = Collections({
-  userSecret: process.env.USER_SECRET,
-  userId: process.env.USER_ID,
-  primaryKey: process.env.PRIMARY_KEY
+  userSecret: process.env.COLLECTIONS_USER_SECRET,
+  userId: process.env.COLLECTIONS_USER_ID,
+  primaryKey: process.env.COLLECTIONS_PRIMARY_KEY
 });
 
 // Request to pay
@@ -136,6 +134,94 @@ collections
 
     return console.log(error.message);
   });
+```
+
+## Disbursement
+
+The disbursements client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
+
+- `primaryKey`: Primary Key for the `Disbursements` product.
+- `userId`: For sandbox, use the one generated with the `momo-sandbox` command.
+- `userSecret`: For sandbox, use the one generated with the `momo-sandbox` command.
+
+You can create a disbursements client with the following
+
+```js
+const disbursements = Disbursements({
+  userSecret: process.env.DISBURSEMENTS_USER_SECRET,
+  userId: process.env.DISBURSEMENTS_USER_ID,
+  primaryKey: process.env.DISBURSEMENTS_PRIMARY_KEY
+});
+```
+
+#### Methods
+
+1. `transfer(request: TransferRequest): Promise<string>`
+
+  Used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
+
+2. `getTransaction(transactionId: string): Promise<Transfer>`
+
+  This method is used to get the transfer object including status and all information from the request. Use the reference id returned from  `transfer`
+
+3. `getBalance(): Promise<Balance>`
+
+  Get the balance of the account.
+
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
+
+  This method is used to check if an account holder is registered and active in the system.
+
+#### Sample Code
+
+```js
+const momo = require("mtn-momo");
+
+// initialise momo library
+const { Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
+
+// initialise disbursements
+const disbursements = Disbursements({
+  userSecret: process.env.DISBURSEMENTS_USER_SECRET,
+  userId: process.env.DISBURSEMENTS_USER_ID,
+  primaryKey: process.env.DISBURSEMENTS_PRIMARY_KEY
+});
+
+// Transfer
+disbursements
+  .transfer({
+    amount: "100",
+    currency: "EUR",
+    externalId: "947354",
+    payee: {
+      partyIdType: "MSISDN",
+      partyId: "+256776564739"
+    },
+    payerMessage: "testing",
+    payeeNote: "hello",
+    callbackUrl: "https://75f59b50.ngrok.io"
+  })
+  .then(transactionId => {
+    console.log({ transactionId });
+
+    // Get transaction status
+    return disbursements.getTransaction(transactionId);
+  })
+  .then(transaction => {
+    console.log({ transaction });
+
+    // Get account balance
+    return disbursements.getBalance();
+  })
+  .then(accountBalance => console.log({ accountBalance }))
+  .catch(error => {
+    if (error.response) {
+      console.log(error.response.data, error.response.config);
+    }
+
+    console.log(error.message);
+  });
+
 ```
 
 

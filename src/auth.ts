@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { createClient } from "./client";
 
-import { AccessToken, Config, UserConfig } from "./types";
+import { AccessToken, Config, UserConfig } from "./common";
 
 export type TokenRefresher = () => Promise<string>;
 
@@ -51,6 +51,20 @@ export const authorizeCollections: Authorizer = function(
   const basicAuthToken: string = createBasicAuthToken(config);
   return client
     .post<AccessToken>("/collection/token/", null, {
+      headers: {
+        Authorization: `Basic ${basicAuthToken}`
+      }
+    })
+    .then(response => response.data);
+};
+
+export const authorizeDisbursements: Authorizer = function(
+  config: Config,
+  client: AxiosInstance = createClient(config)
+): Promise<AccessToken> {
+  const basicAuthToken: string = createBasicAuthToken(config);
+  return client
+    .post<AccessToken>("/disbursement/token/", null, {
       headers: {
         Authorization: `Basic ${basicAuthToken}`
       }

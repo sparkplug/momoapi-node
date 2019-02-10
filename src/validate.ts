@@ -1,13 +1,14 @@
 import { strictEqual } from "assert";
 
+import { PaymentRequest } from "./collections";
 import {
   Environment,
   GlobalConfig,
-  PaymentRequest,
   ProductConfig,
   SubscriptionConfig,
   UserConfig
-} from "./types";
+} from "./common";
+import { TransferRequest } from "./disbursements";
 
 export function validateRequestToPay(
   paymentRequest: PaymentRequest
@@ -23,6 +24,25 @@ export function validateRequestToPay(
       isTruthy(payer.partyIdType),
       true,
       "payer.partyIdType is required"
+    );
+    strictEqual(isString(currency), true, "amount must be a string");
+  });
+}
+
+export function validateTransfer(
+  payoutRequest: TransferRequest
+): Promise<void> {
+  const { amount, currency, payee }: TransferRequest = payoutRequest || {};
+  return Promise.resolve().then(() => {
+    strictEqual(isTruthy(amount), true, "amount is required");
+    strictEqual(isNumeric(amount), true, "amount must be a number");
+    strictEqual(isTruthy(currency), true, "currency is required");
+    strictEqual(isTruthy(payee), true, "payee is required");
+    strictEqual(isTruthy(payee.partyId), true, "payee.partyId is required");
+    strictEqual(
+      isTruthy(payee.partyIdType),
+      true,
+      "payee.partyIdType is required"
     );
     strictEqual(isString(currency), true, "amount must be a string");
   });

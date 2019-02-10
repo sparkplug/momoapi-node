@@ -2,28 +2,28 @@ import { AxiosInstance } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
 
-import Collections from "../src/collections";
+import Disbursements from "../src/disbursements";
 
 import { createMock } from "./mock";
 
-import { PaymentRequest } from "../src/collections";
 import { PartyIdType } from "../src/common";
+import { TransferRequest } from "../src/disbursements";
 
-describe("Collections", function() {
-  let collections: Collections;
+describe("Disbursements", function() {
+  let disbursements: Disbursements;
   let mockAdapter: MockAdapter;
   let mockClient: AxiosInstance;
 
   beforeEach(() => {
     [mockClient, mockAdapter] = createMock();
-    collections = new Collections(mockClient);
+    disbursements = new Disbursements(mockClient);
   });
 
-  describe("requestToPay", function() {
+  describe("transfer", function() {
     context("when the amount is missing", function() {
       it("throws an error", function() {
-        const request = {} as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
+        const request = {} as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
           "amount is required"
         );
       });
@@ -31,8 +31,8 @@ describe("Collections", function() {
 
     context("when the amount is not numeric", function() {
       it("throws an error", function() {
-        const request = { amount: "alphabetic" } as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
+        const request = { amount: "alphabetic" } as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
           "amount must be a number"
         );
       });
@@ -42,21 +42,21 @@ describe("Collections", function() {
       it("throws an error", function() {
         const request = {
           amount: "1000"
-        } as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
+        } as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
           "currency is required"
         );
       });
     });
 
-    context("when the payer is missing", function() {
+    context("when the payee is missing", function() {
       it("throws an error", function() {
         const request = {
           amount: "1000",
           currency: "UGX"
-        } as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
-          "payer is required"
+        } as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
+          "payee is required"
         );
       });
     });
@@ -66,11 +66,11 @@ describe("Collections", function() {
         const request = {
           amount: "1000",
           currency: "UGX",
-          payer: {
+          payee: {
           }
-        } as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
-          "payer.partyId is required"
+        } as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
+          "payee.partyId is required"
         );
       });
     });
@@ -80,22 +80,22 @@ describe("Collections", function() {
         const request = {
           amount: "1000",
           currency: "UGX",
-          payer: {
+          payee: {
             partyId: "xxx",
           }
-        } as PaymentRequest;
-        return expect(collections.requestToPay(request)).to.be.rejectedWith(
-          "payer.partyIdType is required"
+        } as TransferRequest;
+        return expect(disbursements.transfer(request)).to.be.rejectedWith(
+          "payee.partyIdType is required"
         );
       });
     });
 
     it("makes the correct request", function() {
-      const request: PaymentRequest = {
+      const request: TransferRequest = {
         amount: "50",
         currency: "EUR",
         externalId: "123456",
-        payer: {
+        payee: {
           partyIdType: PartyIdType.MSISDN,
           partyId: "256774290781"
         },
@@ -103,11 +103,11 @@ describe("Collections", function() {
         payeeNote: "hello"
       };
       return expect(
-        collections.requestToPay({ ...request, callbackUrl: "callback url" })
+        disbursements.transfer({ ...request, callbackUrl: "callback url" })
       ).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.post).to.have.lengthOf(1);
         expect(mockAdapter.history.post[0].url).to.eq(
-          "/collection/v1_0/requesttopay"
+          "/disbursement/v1_0/transfer"
         );
         expect(mockAdapter.history.post[0].data).to.eq(JSON.stringify(request));
         expect(mockAdapter.history.post[0].headers["X-Reference-Id"]).to.be.a(
@@ -123,11 +123,11 @@ describe("Collections", function() {
   describe("getTransaction", function() {
     it("makes the correct request", function() {
       return expect(
-        collections.getTransaction("reference")
+        disbursements.getTransaction("reference")
       ).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.get).to.have.lengthOf(1);
         expect(mockAdapter.history.get[0].url).to.eq(
-          "/collection/v1_0/requesttopay/reference"
+          "/disbursement/v1_0/transfer/reference"
         );
       });
     });
@@ -135,23 +135,23 @@ describe("Collections", function() {
 
   describe("getBalance", function() {
     it("makes the correct request", function() {
-      return expect(collections.getBalance()).to.be.fulfilled.then(() => {
+      return expect(disbursements.getBalance()).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.get).to.have.lengthOf(1);
         expect(mockAdapter.history.get[0].url).to.eq(
-          "/collection/v1_0/account/balance"
+          "/disbursement/v1_0/account/balance"
         );
       });
     });
   });
 
-  describe("isPayerActive", function() {
+  describe("ispayeeActive", function() {
     it("makes the correct request", function() {
       return expect(
-        collections.isPayerActive("0772000000", PartyIdType.MSISDN)
+        disbursements.isPayerActive("0772000000", PartyIdType.MSISDN)
       ).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.get).to.have.lengthOf(1);
         expect(mockAdapter.history.get[0].url).to.eq(
-          "/collection/v1_0/accountholder/MSISDN/0772000000/active"
+          "/disbursement/v1_0/accountholder/MSISDN/0772000000/active"
         );
       });
     });

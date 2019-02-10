@@ -4,7 +4,7 @@ import { createAuthClient, createClient } from "../src/client";
 import { expect } from "./chai";
 import { createMock } from "./mock";
 
-import { Config, Environment } from "../src/types";
+import { Config, Environment } from "../src/common";
 
 describe("Client", function() {
   const config: Config = {

@@ -4,9 +4,9 @@ const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
 
 // initialise collections
 const collections = Collections({
-  userSecret: process.env.USER_SECRET,
-  userId: process.env.USER_ID,
-  primaryKey: process.env.PRIMARY_KEY
+  userSecret: process.env.COLLECTIONS_USER_SECRET,
+  userId: process.env.COLLECTIONS_USER_ID,
+  primaryKey: process.env.COLLECTIONS_PRIMARY_KEY
 });
 
 // Request to pay

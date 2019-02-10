@@ -4,12 +4,13 @@ import { expect } from "./chai";
 
 import {
   authorizeCollections,
+  authorizeDisbursements,
   createBasicAuthToken,
   createTokenRefresher
 } from "../src/auth";
 import { createMock } from "./mock";
 
-import { AccessToken, Config, Environment } from "../src/types";
+import { AccessToken, Config, Environment } from "../src/common";
 
 describe("Auth", function() {
   const config: Config = {
@@ -62,6 +63,21 @@ describe("Auth", function() {
       ).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.post).to.have.lengthOf(1);
         expect(mockAdapter.history.post[0].url).to.eq("/collection/token/");
+        expect(mockAdapter.history.post[0].headers.Authorization).to.eq(
+          "Basic " + Buffer.from("id:secret").toString("base64")
+        );
+      });
+    });
+  });
+
+  describe("authorizeDisbursements", function() {
+    it("makes the correct request", function() {
+      const [mockClient, mockAdapter] = createMock();
+      return expect(
+        authorizeDisbursements(config, mockClient)
+      ).to.be.fulfilled.then(() => {
+        expect(mockAdapter.history.post).to.have.lengthOf(1);
+        expect(mockAdapter.history.post[0].url).to.eq("/disbursement/token/");
         expect(mockAdapter.history.post[0].headers.Authorization).to.eq(
           "Basic " + Buffer.from("id:secret").toString("base64")
         );

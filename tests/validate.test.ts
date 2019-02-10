@@ -1,14 +1,17 @@
 import { AssertionError } from "assert";
 import uuid from "uuid/v4";
 
-import { PaymentRequest } from "../src/types";
+import { PaymentRequest } from "../src/collections";
 import { expect } from "./chai";
 
+import { PartyIdType } from "../src/common";
+import { TransferRequest } from "../src/disbursements";
 import {
   validateGlobalConfig,
   validateProductConfig,
   validateRequestToPay,
   validateSubscriptionConfig,
+  validateTransfer,
   validateUserConfig
 } from "../src/validate";
 
@@ -247,6 +250,105 @@ describe("Validate", function() {
         return expect(validateRequestToPay(request)).to.be.rejectedWith(
           "payer.partyIdType is required"
         );
+      });
+    });
+
+    context("when the request is valid", function() {
+      it("fulfills", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payer: {
+            partyId: "xxx",
+            partyIdType: PartyIdType.MSISDN
+          }
+        } as PaymentRequest;
+        return expect(validateRequestToPay(request)).to.be.fulfilled;
+      });
+    });
+  });
+
+  describe("validateTransfer", function() {
+    context("when the amount is missing", function() {
+      it("throws an error", function() {
+        const request = {} as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "amount is required"
+        );
+      });
+    });
+
+    context("when the amount is not numeric", function() {
+      it("throws an error", function() {
+        const request = { amount: "alphabetic" } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "amount must be a number"
+        );
+      });
+    });
+
+    context("when the currency is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000"
+        } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "currency is required"
+        );
+      });
+    });
+
+    context("when the payee is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX"
+        } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "payee is required"
+        );
+      });
+    });
+
+    context("when the party id is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payee: {}
+        } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "payee.partyId is required"
+        );
+      });
+    });
+
+    context("when the party id type is missing", function() {
+      it("throws an error", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payee: {
+            partyId: "xxx"
+          }
+        } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "payee.partyIdType is required"
+        );
+      });
+    });
+
+    context("when the request is valid", function() {
+      it("fulfills", function() {
+        const request = {
+          amount: "1000",
+          currency: "UGX",
+          payee: {
+            partyId: "xxx",
+            partyIdType: PartyIdType.MSISDN
+          }
+        } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.fulfilled;
       });
     });
   });
