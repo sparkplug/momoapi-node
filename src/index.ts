@@ -1,3 +1,15 @@
+export { Payment, PaymentRequest } from "./collections";
+export { Transfer, TransferRequest } from "./disbursements";
+export * from "./errors";
+export {
+  PartyIdType,
+  Party as Payer,
+  Environment,
+  FailureReason,
+  GlobalConfig,
+  ProductConfig
+} from "./common";
+
 import { AxiosInstance } from "axios";
 
 import Collections from "./collections";
@@ -7,7 +19,7 @@ import Users from "./users";
 import {
   authorizeCollections,
   authorizeDisbursements,
-  createTokenRefresher,
+  createTokenRefresher
 } from "./auth";
 import { createAuthClient, createClient } from "./client";
 import {
@@ -24,7 +36,7 @@ import {
   SubscriptionConfig
 } from "./common";
 
-interface MomoClient {
+export interface MomoClient {
   Collections(productConfig: ProductConfig): Collections;
   Disbursements(productConfig: ProductConfig): Disbursements;
   Users(subscription: SubscriptionConfig): Users;
@@ -35,7 +47,7 @@ const defaultGlobalConfig: GlobalConfig = {
   environment: Environment.SANDBOX
 };
 
-export = (globalConfig: GlobalConfig): MomoClient => {
+export function create(globalConfig: GlobalConfig): MomoClient {
   validateGlobalConfig(globalConfig);
 
   return {
@@ -84,4 +96,4 @@ export = (globalConfig: GlobalConfig): MomoClient => {
       return new Users(client);
     }
   };
-};
+}
