@@ -8,6 +8,7 @@
     "arrow-parens": false,
     "only-arrow-functions": false,
     "no-var-requires": false,
-    "ordered-imports": true
+    "ordered-imports": true,
+    "max-classes-per-file": false
   }
 }

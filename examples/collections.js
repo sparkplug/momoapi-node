@@ -1,6 +1,8 @@
 const momo = require("../lib/");
 
-const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections } = momo({
+  callbackHost: process.env.CALLBACK_HOST
+});
 
 // initialise collections
 const collections = Collections({
@@ -36,9 +38,5 @@ collections
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response) {
-      console.log(error.response.data, error.response.config);
-    }
-
-    console.log(error.message);
+    console.log(error);
   });

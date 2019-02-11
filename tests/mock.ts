@@ -3,7 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 
 import { Payment } from "../src/collections";
 import { AccessToken, Balance, Credentials } from "../src/common";
-import { Transfer, } from "../src/disbursements";
+import { Transfer } from "../src/disbursements";
 
 export function createMock(): [AxiosInstance, MockAdapter] {
   const client = axios.create({
@@ -11,6 +11,7 @@ export function createMock(): [AxiosInstance, MockAdapter] {
       "Content-Type": "application/json"
     }
   });
+
   const mock = new MockAdapter(client);
 
   mock.onGet("/test").reply(200);
@@ -59,7 +60,9 @@ export function createMock(): [AxiosInstance, MockAdapter] {
   } as AccessToken);
 
   mock
-    .onGet(/\/disbursement\/v1_0\/accountholder\/(MSISDN|EMAIL|PARTY_CODE)\/\w+/)
+    .onGet(
+      /\/disbursement\/v1_0\/accountholder\/(MSISDN|EMAIL|PARTY_CODE)\/\w+/
+    )
     .reply(200, "true");
 
   mock.onPost("/disbursement/v1_0/transfer").reply(201);

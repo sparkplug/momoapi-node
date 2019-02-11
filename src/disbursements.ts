@@ -1,13 +1,15 @@
 import { AxiosInstance } from "axios";
 import uuid from "uuid/v4";
 
+import { getError } from "./errors";
+import { validateTransfer } from "./validate";
+
 import {
   Balance,
-  FailureReasonType,
+  FailureReason,
   PartyIdType,
   TransactionStatus
 } from "./common";
-import { validateTransfer } from "./validate";
 
 export interface TransferRequest {
   /**
@@ -93,10 +95,7 @@ export interface Transfer {
     partyId: string;
   };
   status: TransactionStatus;
-  reason?: {
-    type: FailureReasonType;
-    message: string;
-  };
+  reason?: FailureReason;
 }
 
 export default class Disbursements {
@@ -138,7 +137,14 @@ export default class Disbursements {
   public getTransaction(referenceId: string): Promise<Transfer> {
     return this.client
       .get<Transfer>(`/disbursement/v1_0/transfer/${referenceId}`)
-      .then(response => response.data);
+      .then(response => response.data)
+      .then(transaction => {
+        if (transaction.status === TransactionStatus.FAILED) {
+          return Promise.reject(getError(transaction.reason as FailureReason));
+        }
+
+        return Promise.resolve(transaction);
+      });
   }
 
   /**
