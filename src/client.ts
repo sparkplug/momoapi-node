@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-import { TokenRefresher } from "./auth";
+import { handleError } from "./errors";
 
+import { TokenRefresher } from "./auth";
 import { GlobalConfig, SubscriptionConfig } from "./common";
 
 export function createClient(
@@ -14,7 +15,7 @@ export function createClient(
     "X-Target-Environment": config.environment || "sandbox"
   };
 
-  return client;
+  return withErrorHandling(client);
 }
 
 export function createAuthClient(
@@ -32,6 +33,15 @@ export function createAuthClient(
       };
     });
   });
+
+  return client;
+}
+
+export function withErrorHandling(client: AxiosInstance): AxiosInstance {
+  client.interceptors.response.use(
+    response => response,
+    error => Promise.reject(handleError(error))
+  );
 
   return client;
 }

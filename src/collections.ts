@@ -3,11 +3,12 @@ import uuid from "uuid/v4";
 
 import {
   Balance,
-  FailureReasonType,
+  FailureReason,
   PartyIdType,
   Payer,
-  TransactionStatus,
+  TransactionStatus
 } from "./common";
+import { getError } from "./errors";
 import { validateRequestToPay } from "./validate";
 
 export interface PaymentRequest {
@@ -97,10 +98,7 @@ export interface Payment {
    */
   payeeNote: string;
 
-  reason?: {
-    type: FailureReasonType;
-    message: string;
-  };
+  reason?: FailureReason;
 
   status: TransactionStatus;
 }
@@ -147,7 +145,14 @@ export default class Collections {
   public getTransaction(referenceId: string): Promise<Payment> {
     return this.client
       .get<Payment>(`/collection/v1_0/requesttopay/${referenceId}`)
-      .then(response => response.data);
+      .then(response => response.data)
+      .then(transaction => {
+        if (transaction.status === TransactionStatus.FAILED) {
+          return Promise.reject(getError(transaction.reason as FailureReason));
+        }
+
+        return Promise.resolve(transaction);
+      });
   }
 
   /**
