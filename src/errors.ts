@@ -6,75 +6,82 @@ interface ErrorBody {
   message: string;
 }
 
-export class ApprovalRejectedError extends Error {
+export class MtnMoMoError extends Error {
+  constructor(message?: string) {
+    super(message);
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class ApprovalRejectedError extends MtnMoMoError {
   public name = "ApprovalRejectedError";
 }
 
-export class ExpiredError extends Error {
+export class ExpiredError extends MtnMoMoError {
   public name = "ExpiredError";
 }
 
-export class InternalProcessingError extends Error {
+export class InternalProcessingError extends MtnMoMoError {
   public name = "InternalProcessingError";
 }
 
-export class InvalidCallbackUrlHostError extends Error {
+export class InvalidCallbackUrlHostError extends MtnMoMoError {
   public name = "InvalidCallbackUrlHostError";
 }
 
-export class InvalidCurrencyError extends Error {
+export class InvalidCurrencyError extends MtnMoMoError {
   public name = "InvalidCurrencyError";
 }
 
-export class NotAllowedTargetEnvironmentError extends Error {
+export class NotAllowedTargetEnvironmentError extends MtnMoMoError {
   public name = "NotAllowedTargetEnvironmentError";
 }
 
-export class NotAllowedError extends Error {
+export class NotAllowedError extends MtnMoMoError {
   public name = "NotAllowedError";
 }
 
-export class NotEnoughFundsError extends Error {
+export class NotEnoughFundsError extends MtnMoMoError {
   public name = "NotEnoughFundsError";
 }
 
-export class PayeeNotFoundError extends Error {
+export class PayeeNotFoundError extends MtnMoMoError {
   public name = "PayeeNotFoundError";
 }
 
-export class PayeeNotAllowedToReceiveError extends Error {
+export class PayeeNotAllowedToReceiveError extends MtnMoMoError {
   public name = "PayeeNotAllowedToReceiveError";
 }
 
-export class PayerLimitReachedError extends Error {
+export class PayerLimitReachedError extends MtnMoMoError {
   public name = "PayerLimitReachedError";
 }
 
-export class PayerNotFoundError extends Error {
+export class PayerNotFoundError extends MtnMoMoError {
   public name = "PayerNotFoundError";
 }
 
-export class PaymentNotApprovedError extends Error {
+export class PaymentNotApprovedError extends MtnMoMoError {
   public name = "PaymentNotApprovedError";
 }
 
-export class ResourceAlreadyExistError extends Error {
+export class ResourceAlreadyExistError extends MtnMoMoError {
   public name = "ResourceAlreadyExistError";
 }
 
-export class ResourceNotFoundError extends Error {
+export class ResourceNotFoundError extends MtnMoMoError {
   public name = "ResourceNotFoundError";
 }
 
-export class ServiceUnavailableError extends Error {
+export class ServiceUnavailableError extends MtnMoMoError {
   public name = "NotAllowedTargetEnvironment";
 }
 
-export class TransactionCancelledError extends Error {
+export class TransactionCancelledError extends MtnMoMoError {
   public name = "TransactionCancelledError";
 }
 
-export class UnspecifiedError extends Error {
+export class UnspecifiedError extends MtnMoMoError {
   public name = "ResourceAlreadyExistError";
 }
 

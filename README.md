@@ -3,8 +3,10 @@
 MTN MoMo API Client for Node JS.
 
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-node.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-node)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
 ![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/momo-api-developers/)
 
 ## Usage
 
@@ -49,12 +51,12 @@ As an example, you might configure the library like this:
 ```js
 const momo = require("mtn-momo");
 
-const { Collections, Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections, Disbursements } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
 ```
 
 ## Collections
 
-The collections client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
+The collections client can be created with the following paramaters. Note that the `userId` and `userSecret` for production are provided on the MTN OVA dashboard;
 
 - `primaryKey`: Primary Key for the `Collections` product.
 - `userId`: For sandbox, use the one generated with the `momo-sandbox` command.
@@ -93,7 +95,7 @@ const collections = Collections({
 ```js
 const momo = require("mtn-momo");
 
-const { Collections } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
 
 const collections = Collections({
   userSecret: process.env.COLLECTIONS_USER_SECRET,
@@ -138,7 +140,7 @@ collections
 
 ## Disbursement
 
-The disbursements client can be created with the following paramaters. Note that the `userID` and `userSecret` for production are provided on the MTN OVA dashboard;
+The disbursements client can be created with the following paramaters. Note that the `userId` and `userSecret` for production are provided on the MTN OVA dashboard;
 
 - `primaryKey`: Primary Key for the `Disbursements` product.
 - `userId`: For sandbox, use the one generated with the `momo-sandbox` command.

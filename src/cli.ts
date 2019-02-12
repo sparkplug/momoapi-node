@@ -3,7 +3,7 @@
 import { AxiosError } from "axios";
 import program from "commander";
 
-import momo from "./";
+import * as momo from "./";
 import { Credentials } from "./common";
 
 const { version } = require("../package.json");
@@ -17,7 +17,7 @@ program
 
 const stringify = (obj: object | string) => JSON.stringify(obj, null, 2);
 
-const { Users } = momo({ callbackHost: program.host });
+const { Users } = momo.create({ callbackHost: program.host });
 
 const users = Users({ primaryKey: program.primaryKey });
 

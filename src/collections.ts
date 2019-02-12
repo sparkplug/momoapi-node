@@ -1,15 +1,16 @@
 import { AxiosInstance } from "axios";
 import uuid from "uuid/v4";
 
+import { getError } from "./errors";
+import { validateRequestToPay } from "./validate";
+
 import {
   Balance,
   FailureReason,
+  Party,
   PartyIdType,
-  Payer,
   TransactionStatus
 } from "./common";
-import { getError } from "./errors";
-import { validateRequestToPay } from "./validate";
 
 export interface PaymentRequest {
   /**
@@ -38,7 +39,7 @@ export interface PaymentRequest {
    *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
    *   - PARTY_CODE - UUID of the party. Validated with IsUuid
    */
-  payer: Payer;
+  payer: Party;
 
   /**
    * Message that will be written in the payer transaction history message field.
@@ -86,7 +87,7 @@ export interface Payment {
    *   - EMAIL - Validated to be a valid e-mail format. Validated with IsEmail
    *   - PARTY_CODE - UUID of the party. Validated with IsUuid
    */
-  payer: Payer;
+  payer: Party;
 
   /**
    * Message that will be written in the payer transaction history message field.

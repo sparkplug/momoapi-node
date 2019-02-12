@@ -1,6 +1,6 @@
 language: node_js
 
-node_js: 8
+node_js: 10
 
 install:
   - npm ci
@@ -11,21 +11,11 @@ script:
   - npm run compile
 
 deploy:
-  - provider: npm
-    email: "$NPM_EMAIL"
-    api_key: "$NPM_TOKEN"
-    skip_cleanup: true
-    on:
-      tags: true
-      repo: sparkplug/momoapi-node
-      branch: master
-
-  - provider: releases
-    api_key: "$GITHUB_TOKEN"
-    file_glob: true
-    file: "lib/*"
-    skip_cleanup: true
-    on:
-      tags: true
-      repo: sparkplug/momoapi-node
-      branch: master
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx semantic-release
+  on:
+    tags: false
+    repo: sparkplug/momoapi-node
+    branch: master

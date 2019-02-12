@@ -82,7 +82,7 @@ export interface Balance {
   currency: string;
 }
 
-export interface Payer {
+export interface Party {
   partyIdType: PartyIdType;
   partyId: string;
 }

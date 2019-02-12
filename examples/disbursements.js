@@ -1,6 +1,6 @@
 const momo = require("../lib");
 
-const { Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Disbursements } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
 
 // initialise collections
 const disbursements = Disbursements({
