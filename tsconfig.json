@@ -9,5 +9,5 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "exclude": ["lib", "node_modules", "tests"]
+  "exclude": ["lib", "node_modules", "test"]
 }

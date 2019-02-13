@@ -4,7 +4,7 @@ import uuid from "uuid/v4";
 import { PaymentRequest } from "../src/collections";
 import { expect } from "./chai";
 
-import { PartyIdType } from "../src/common";
+import { Environment, PartyIdType, ProductConfig, SubscriptionConfig, UserConfig } from "../src/common";
 import { TransferRequest } from "../src/disbursements";
 import {
   validateGlobalConfig,
@@ -41,7 +41,7 @@ describe("Validate", function() {
             expect(
               validateGlobalConfig.bind(null, {
                 callbackHost: "example.com",
-                environment: "production"
+                environment: Environment.PRODUCTION
               })
             ).to.throw(
               AssertionError,
@@ -55,7 +55,7 @@ describe("Validate", function() {
             expect(
               validateGlobalConfig.bind(null, {
                 callbackHost: "example.com",
-                environment: "production",
+                environment: Environment.PRODUCTION,
                 baseUrl: "mtn production base url"
               })
             ).to.not.throw();
@@ -68,7 +68,7 @@ describe("Validate", function() {
   describe("validateProductConfig", function() {
     context("when primaryKey is not specified", function() {
       it("throws an error", function() {
-        expect(validateProductConfig.bind(null, {})).to.throw(
+        expect(validateProductConfig.bind(null, {} as ProductConfig)).to.throw(
           AssertionError,
           "primaryKey is required"
         );
@@ -78,7 +78,9 @@ describe("Validate", function() {
     context("when userId is not specified", function() {
       it("throws an error", function() {
         expect(
-          validateProductConfig.bind(null, { primaryKey: "test primary key" })
+          validateProductConfig.bind(null, {
+            primaryKey: "test primary key"
+          } as ProductConfig)
         ).to.throw(AssertionError, "userId is required");
       });
     });
@@ -89,7 +91,7 @@ describe("Validate", function() {
           validateProductConfig.bind(null, {
             primaryKey: "test primary key",
             userId: "test user id"
-          })
+          } as ProductConfig)
         ).to.throw(AssertionError, "userSecret is required");
       });
     });
@@ -122,7 +124,7 @@ describe("Validate", function() {
   describe("validateSubscriptionConfig", function() {
     context("when primaryKey is not specified", function() {
       it("throws an error", function() {
-        expect(validateSubscriptionConfig.bind(null, {})).to.throw(
+        expect(validateSubscriptionConfig.bind(null, {} as SubscriptionConfig)).to.throw(
           AssertionError,
           "primaryKey is required"
         );
@@ -143,7 +145,7 @@ describe("Validate", function() {
   describe("validateUserConfig", function() {
     context("when userId is not specified", function() {
       it("throws an error", function() {
-        expect(validateUserConfig.bind(null, {})).to.throw(
+        expect(validateUserConfig.bind(null, {} as UserConfig)).to.throw(
           AssertionError,
           "userId is required"
         );
@@ -155,7 +157,7 @@ describe("Validate", function() {
         expect(
           validateUserConfig.bind(null, {
             userId: "test user id"
-          })
+          } as UserConfig)
         ).to.throw(AssertionError, "userSecret is required");
       });
     });
