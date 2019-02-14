@@ -182,7 +182,7 @@ const disbursements = Disbursements({
 const momo = require("mtn-momo");
 
 // initialise momo library
-const { Disbursements } = momo({ callbackHost: process.env.CALLBACK_HOST });
+const { Disbursements } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
 
 // initialise disbursements
 const disbursements = Disbursements({
