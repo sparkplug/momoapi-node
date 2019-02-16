@@ -1,5 +1,7 @@
 import { AxiosError } from "axios";
+import { Payment } from "./collections";
 import { FailureReason } from "./common";
+import { Transfer } from "./disbursements";
 
 interface ErrorBody {
   code: FailureReason;
@@ -7,6 +9,8 @@ interface ErrorBody {
 }
 
 export class MtnMoMoError extends Error {
+  public transaction?: Payment | Transfer;
+
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
@@ -74,7 +78,7 @@ export class ResourceNotFoundError extends MtnMoMoError {
 }
 
 export class ServiceUnavailableError extends MtnMoMoError {
-  public name = "NotAllowedTargetEnvironment";
+  public name = "ServiceUnavailableError";
 }
 
 export class TransactionCancelledError extends MtnMoMoError {
@@ -82,7 +86,7 @@ export class TransactionCancelledError extends MtnMoMoError {
 }
 
 export class UnspecifiedError extends MtnMoMoError {
-  public name = "ResourceAlreadyExistError";
+  public name = "UnspecifiedError";
 }
 
 export function handleError(error: AxiosError): Error {
@@ -165,4 +169,11 @@ export function getError(code: FailureReason, message?: string) {
   }
 
   return new UnspecifiedError();
+}
+
+export function getTransactionError(transaction: Payment | Transfer) {
+  const error: MtnMoMoError = getError(transaction.reason as FailureReason);
+  error.transaction = transaction;
+
+  return error;
 }
