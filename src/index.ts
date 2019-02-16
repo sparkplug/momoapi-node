@@ -2,8 +2,10 @@ export { Payment, PaymentRequest } from "./collections";
 export { Transfer, TransferRequest } from "./disbursements";
 export * from "./errors";
 export {
-  PartyIdType,
+  PartyIdType as PayerType,
   Party as Payer,
+  TransactionStatus as Status,
+  Balance,
   Environment,
   FailureReason,
   GlobalConfig,
