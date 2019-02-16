@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import uuid from "uuid/v4";
 
-import { getError } from "./errors";
+import { getTransactionError } from "./errors";
 import { validateRequestToPay } from "./validate";
 
 import {
@@ -139,7 +139,12 @@ export default class Collections {
   }
 
   /**
-   * This method is used to get the Transaction object.
+   * This method is used to retrieve transaction information. You can invoke it
+   * at intervals until your transaction fails or succeeds.
+   *
+   * If the transaction has failed, it will throw an appropriate error. The error will be a subclass
+   * of `MtnMoMoError`. Check [`src/error.ts`](https://github.com/sparkplug/momoapi-node/blob/master/src/errors.ts)
+   * for the various errors that can be thrown
    *
    * @param referenceId the value returned from `requestToPay`
    */
@@ -149,7 +154,7 @@ export default class Collections {
       .then(response => response.data)
       .then(transaction => {
         if (transaction.status === TransactionStatus.FAILED) {
-          return Promise.reject(getError(transaction.reason as FailureReason));
+          return Promise.reject(getTransactionError(transaction));
         }
 
         return Promise.resolve(transaction);

@@ -53,7 +53,9 @@ As an example, you might configure the library like this:
 ```js
 const momo = require("mtn-momo");
 
-const { Collections, Disbursements } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections, Disbursements } = momo.create({
+  callbackHost: process.env.CALLBACK_HOST
+});
 ```
 
 ## Collections
@@ -76,28 +78,22 @@ const collections = Collections({
 
 #### Methods
 
-1. `requestToPay(request: PaymentRequest): Promise<string>`
+1. `requestToPay(request: PaymentRequest): Promise<string>`: This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
 
-  This operation is used to request a payment from a consumer (Payer). The payer will be asked to authorize the payment. The transaction is executed once the payer has authorized the payment. The transaction will be in status PENDING until it is authorized or declined by the payer or it is timed out by the system. Status of the transaction can be validated by using `getTransaction`
+2. `getTransaction(transactionId: string): Promise<Payment>`: Retrieve transaction information using the `transactionId` returned by `requestToPay`. You can invoke it at intervals until the transaction fails or succeeds. If the transaction has failed, it will throw an appropriate error. The error will be a subclass of `MtnMoMoError`. Check [`src/error.ts`](https://github.com/sparkplug/momoapi-node/blob/master/src/errors.ts) for the various errors that can be thrown
 
-2. `getTransaction(transactionId: string): Promise<Payment>`
+3. `getBalance(): Promise<Balance>`: Get the balance of the account.
 
-  This method is used to get the payment including status and all information from the request. Use the `transactionId` returned from `requestToPay` 
-
-3. `getBalance(): Promise<Balance>`
-
-  Get the balance of the account.
-
-4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
-
-  This method is used to check if an account holder is registered and active in the system.
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`: check if an account holder is registered and active in the system.
 
 #### Sample Code
 
 ```js
 const momo = require("mtn-momo");
 
-const { Collections } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
+const { Collections } = momo.create({
+  callbackHost: process.env.CALLBACK_HOST
+});
 
 const collections = Collections({
   userSecret: process.env.COLLECTIONS_USER_SECRET,
@@ -162,19 +158,13 @@ const disbursements = Disbursements({
 
 1. `transfer(request: TransferRequest): Promise<string>`
 
-  Used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
+Used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
 
-2. `getTransaction(transactionId: string): Promise<Transfer>`
+2. `getTransaction(transactionId: string): Promise<Transfer>`: Retrieve transaction information using the `transactionId` returned by `transfer`. You can invoke it at intervals until the transaction fails or succeeds. If the transaction has failed, it will throw an appropriate error. The error will be a subclass of `MtnMoMoError`. Check [`src/error.ts`](https://github.com/sparkplug/momoapi-node/blob/master/src/errors.ts) for the various errors that can be thrown
 
-  This method is used to get the transfer object including status and all information from the request. Use the reference id returned from  `transfer`
+3. `getBalance(): Promise<Balance>`: Get your account balance.
 
-3. `getBalance(): Promise<Balance>`
-
-  Get the balance of the account.
-
-4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`
-
-  This method is used to check if an account holder is registered and active in the system.
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`: This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
@@ -182,7 +172,9 @@ const disbursements = Disbursements({
 const momo = require("mtn-momo");
 
 // initialise momo library
-const { Disbursements } = momo.create({ callbackHost: process.env.CALLBACK_HOST });
+const { Disbursements } = momo.create({
+  callbackHost: process.env.CALLBACK_HOST
+});
 
 // initialise disbursements
 const disbursements = Disbursements({
@@ -225,7 +217,4 @@ disbursements
 
     console.log(error.message);
   });
-
 ```
-
-

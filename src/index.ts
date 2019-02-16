@@ -49,6 +49,11 @@ const defaultGlobalConfig: GlobalConfig = {
   environment: Environment.SANDBOX
 };
 
+/**
+ * Initialise the library
+ *
+ * @param globalConfig Global configuration required to use any product
+ */
 export function create(globalConfig: GlobalConfig): MomoClient {
   validateGlobalConfig(globalConfig);
 
