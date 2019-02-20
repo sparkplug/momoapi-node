@@ -99,7 +99,7 @@ export function handleError(error: AxiosError): Error {
   return getError(code, message);
 }
 
-export function getError(code: FailureReason, message?: string) {
+export function getError(code?: FailureReason, message?: string) {
   if (code === FailureReason.APPROVAL_REJECTED) {
     return new ApprovalRejectedError(message);
   }
