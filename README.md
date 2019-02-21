@@ -6,7 +6,7 @@ MTN MoMo API Client for Node JS.
 [![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
 ![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
 [![Known Vulnerabilities](https://snyk.io/test/npm/mtn-momo/badge.svg)](https://snyk.io/test/npm/mtn-momo)
-[![Coverage Status](https://coveralls.io/repos/github/sparkplug/momoapi-node/badge.svg?branch=coverage)](https://coveralls.io/github/sparkplug/momoapi-node?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sparkplug/momoapi-node/badge.svg?branch=master)](https://coveralls.io/github/sparkplug/momoapi-node?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/momo-api-developers/)
 
