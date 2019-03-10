@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { AxiosError } from "axios";
 import program from "commander";
 
 import * as momo from "./";
 import { Credentials } from "./common";
+import { MtnMoMoError } from "./errors";
 
 const { version } = require("../package.json");
 
@@ -34,12 +34,6 @@ users
       );
     });
   })
-  .catch((error: AxiosError) => {
-    let message: string = stringify(error.message);
-
-    if (error.response && error.response.data) {
-      message = stringify(error.response.data);
-    }
-
-    console.log(message);
+  .catch((error: MtnMoMoError) => {
+    console.log(error);
   });
