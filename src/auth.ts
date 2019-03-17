@@ -1,5 +1,4 @@
 import { AxiosInstance } from "axios";
-import moment from "moment";
 
 import { createClient } from "./client";
 
@@ -14,7 +13,7 @@ export type Authorizer = (
 
 interface OAuthCredentials {
   accessToken: string;
-  expires: Date;
+  expires: number;
 }
 
 export function createTokenRefresher(
@@ -27,11 +26,10 @@ export function createTokenRefresher(
       return authorize(config)
         .then((accessToken: AccessToken) => {
           const { access_token, expires_in }: AccessToken = accessToken;
+          const expires: number = Date.now() + expires_in * 1000 - 60000;
           return {
             accessToken: access_token,
-            expires: moment()
-              .add(expires_in, "seconds")
-              .toDate()
+            expires
           };
         })
         .then(freshCredentials => {
@@ -83,5 +81,5 @@ function isExpired(credentials: OAuthCredentials): boolean {
     return true;
   }
 
-  return moment().isAfter(credentials.expires);
+  return Date.now() > credentials.expires;
 }

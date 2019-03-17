@@ -25,7 +25,8 @@
   },
   "keywords": [
     "MTN",
-    "Mobile Money",
+    "Mobile",
+    "Money",
     "Momo",
     "TypeScript",
     "NodeJS"
@@ -37,7 +38,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "commander": "^2.19.0",
-    "moment": "^2.22.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
