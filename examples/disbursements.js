@@ -37,9 +37,5 @@ disbursements
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response) {
-      console.log(error.response.data, error.response.config);
-    }
-
-    console.log(error.message);
+    console.log(error);
   });
