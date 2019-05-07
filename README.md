@@ -1,3 +1,5 @@
+![MTN MoMo](/MoMo.png)
+
 # MTN Mobile Money API Client
 
 MTN MoMo API Client for Node JS.
