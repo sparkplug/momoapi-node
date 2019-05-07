@@ -1,5 +1,3 @@
-![MTN MoMo](/MoMo.png)
-
 # MTN MoMo API NodeJS Client</h1>
 
 <strong>Power your apps with our MTN MoMo API</strong>
