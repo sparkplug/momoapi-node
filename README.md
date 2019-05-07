@@ -1,14 +1,10 @@
 ![MTN MoMo](/MoMo.png)
 
-<div align="center">
-  <h1>MTN MoMo API NodeJS Client</h1>
-</div>
+# MTN MoMo API NodeJS Client</h1>
 
-<div align="center">
-  <strong>Power your apps with our MTN MoMo API</strong><br>
-</div>
+* Power your apps with our MTN MoMo API *
 
-<div align="center">
+<div>
   Join our active, engaged community: <br>
   <a href="https://momodeveloper.mtn.com/">Website</a>
   <span> | </span>
