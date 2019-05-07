@@ -5,7 +5,7 @@
 </div>
 
 <div align="center">
-  <strong>Power your apps with our MTN MoMo API</strong>
+  <strong>Power your apps with our MTN MoMo API</strong><br>
 </div>
 
 <div align="center">
