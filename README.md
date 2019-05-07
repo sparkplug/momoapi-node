@@ -1,16 +1,28 @@
 ![MTN MoMo](/MoMo.png)
 
-# MTN Mobile Money API Client
+<div align="center">
+  <h1>MTN MoMo API NodeJS Client</h1>
+</div>
 
-MTN MoMo API Client for Node JS.
+<div align="center">
+  <strong>Power your apps with our MTN MoMo API</strong>
+</div>
 
+<div align="center">
+  Join our active, engaged community: <br>
+  <a href="https://momodeveloper.mtn.com/">Website</a>
+  <span> | </span>
+  <a href="https://spectrum.chat/momo-api-developers/">Spectrum</a>
+</div>
+
+<div align="center">
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-node.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-node)
 [![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
 ![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
 [![Known Vulnerabilities](https://snyk.io/test/npm/mtn-momo/badge.svg)](https://snyk.io/test/npm/mtn-momo)
 [![Coverage Status](https://coveralls.io/repos/github/sparkplug/momoapi-node/badge.svg?branch=master)](https://coveralls.io/github/sparkplug/momoapi-node?branch=master)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/momo-api-developers/)
+</div>
 
 ## Usage
 
