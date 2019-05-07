@@ -130,11 +130,7 @@ collections
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response) {
-      return console.log(error.response.data, error.response.config);
-    }
-
-    return console.log(error.message);
+    console.log(error);
   });
 ```
 
@@ -213,10 +209,6 @@ disbursements
   })
   .then(accountBalance => console.log({ accountBalance }))
   .catch(error => {
-    if (error.response) {
-      console.log(error.response.data, error.response.config);
-    }
-
-    console.log(error.message);
+    console.log(error);
   });
 ```
