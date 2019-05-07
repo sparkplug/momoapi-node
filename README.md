@@ -15,14 +15,14 @@
   <a href="https://spectrum.chat/momo-api-developers/">Spectrum</a>
 </div>
 
-<div align="center">
+
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-node.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-node)
 [![NPM Version](https://badge.fury.io/js/mtn-momo.svg)](https://badge.fury.io/js/mtn-momo)
 ![Installs](https://img.shields.io/npm/dt/mtn-momo.svg)
 [![Known Vulnerabilities](https://snyk.io/test/npm/mtn-momo/badge.svg)](https://snyk.io/test/npm/mtn-momo)
 [![Coverage Status](https://coveralls.io/repos/github/sparkplug/momoapi-node/badge.svg?branch=master)](https://coveralls.io/github/sparkplug/momoapi-node?branch=master)
 [![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/momo-api-developers/)
-</div>
+
 
 ## Usage
 
