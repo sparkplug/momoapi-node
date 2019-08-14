@@ -163,7 +163,7 @@ const disbursements = Disbursements({
 
 1. `transfer(request: TransferRequest): Promise<string>`
 
-Used to transfer an amount from the owner’s account to a payee account. Status of the transaction can be validated by using the
+Used to transfer an amount from the owner’s account to a payee account. It returns a transaction id which can use to check the transaction status with the `getTransaction` function
 
 2. `getTransaction(transactionId: string): Promise<Transfer>`: Retrieve transaction information using the `transactionId` returned by `transfer`. You can invoke it at intervals until the transaction fails or succeeds. If the transaction has failed, it will throw an appropriate error. The error will be a subclass of `MtnMoMoError`. Check [`src/error.ts`](https://github.com/sparkplug/momoapi-node/blob/master/src/errors.ts) for the various errors that can be thrown
 
