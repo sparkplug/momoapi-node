@@ -29,6 +29,7 @@ Add the library to your project
 npm install mtn-momo --save-dev
 ```
 
+
 ## Sandbox Credentials
 
 Next, we need to get the `User ID` and `User Secret` and to do this we shall need to use the `Primary Key` for the `Product` to which we are subscribed, as well as specify a `host`. We run the `momo-sandbox` as below.
