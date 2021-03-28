@@ -1,5 +1,5 @@
 import { AssertionError } from "assert";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 
 import { PaymentRequest } from "../src/collections";
 import { expect } from "./chai";
