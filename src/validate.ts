@@ -32,8 +32,10 @@ export function validateRequestToPay(
 export function validateTransfer(
   payoutRequest: TransferRequest
 ): Promise<void> {
-  const { amount, currency, payee }: TransferRequest = payoutRequest || {};
+  const { amount, currency, payee, referenceId }: TransferRequest = payoutRequest || {};
   return Promise.resolve().then(() => {
+    strictEqual(isTruthy(referenceId), true, "referenceId is required");
+    strictEqual(isUuid4(referenceId as string), true, "referenceId must be a valid uuid v4");
     strictEqual(isTruthy(amount), true, "amount is required");
     strictEqual(isNumeric(amount), true, "amount must be a number");
     strictEqual(isTruthy(currency), true, "currency is required");
