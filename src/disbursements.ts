@@ -177,7 +177,7 @@ export default class Disbursements {
     type: PartyIdType = PartyIdType.MSISDN
   ): Promise<string> {
     return this.client
-      .get<string>(`/disbursement/v1_0/accountholder/${type}/${id}/active`)
+      .get<string>(`/disbursement/v1_0/accountholder/${String(type).toLowerCase()}/${id}/active`)
       .then(response => response.data);
   }
 }
