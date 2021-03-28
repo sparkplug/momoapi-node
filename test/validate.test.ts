@@ -271,9 +271,27 @@ describe("Validate", function() {
   });
 
   describe("validateTransfer", function() {
-    context("when the amount is missing", function() {
+    context("when the referenceId is missing", function() {
       it("throws an error", function() {
         const request = {} as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "referenceId is required"
+        );
+      });
+    });
+      
+    context("when referenceId is not a valid uuid", function() {
+      it("throws an error", function () {
+        const request = { referenceId: "test reference id" } as TransferRequest;
+        return expect(validateTransfer(request)).to.be.rejectedWith(
+          "referenceId must be a valid uuid v4"
+        );
+      });
+    });
+      
+    context("when the amount is missing", function() {
+      it("throws an error", function() {
+        const request = { referenceId: uuid() } as TransferRequest;
         return expect(validateTransfer(request)).to.be.rejectedWith(
           "amount is required"
         );
@@ -282,7 +300,7 @@ describe("Validate", function() {
 
     context("when the amount is not numeric", function() {
       it("throws an error", function() {
-        const request = { amount: "alphabetic" } as TransferRequest;
+        const request = { referenceId: uuid(), amount: "alphabetic" } as TransferRequest;
         return expect(validateTransfer(request)).to.be.rejectedWith(
           "amount must be a number"
         );
@@ -292,6 +310,7 @@ describe("Validate", function() {
     context("when the currency is missing", function() {
       it("throws an error", function() {
         const request = {
+          referenceId: uuid(),
           amount: "1000"
         } as TransferRequest;
         return expect(validateTransfer(request)).to.be.rejectedWith(
@@ -303,6 +322,7 @@ describe("Validate", function() {
     context("when the payee is missing", function() {
       it("throws an error", function() {
         const request = {
+          referenceId: uuid(),
           amount: "1000",
           currency: "UGX"
         } as TransferRequest;
@@ -315,6 +335,7 @@ describe("Validate", function() {
     context("when the party id is missing", function() {
       it("throws an error", function() {
         const request = {
+          referenceId: uuid(),
           amount: "1000",
           currency: "UGX",
           payee: {}
@@ -328,6 +349,7 @@ describe("Validate", function() {
     context("when the party id type is missing", function() {
       it("throws an error", function() {
         const request = {
+          referenceId: uuid(),
           amount: "1000",
           currency: "UGX",
           payee: {
@@ -343,6 +365,7 @@ describe("Validate", function() {
     context("when the request is valid", function() {
       it("fulfills", function() {
         const request = {
+          referenceId: uuid(),
           amount: "1000",
           currency: "UGX",
           payee: {
