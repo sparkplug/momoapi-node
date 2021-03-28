@@ -168,7 +168,7 @@ export function getError(code?: FailureReason, message?: string) {
     return new TransactionCancelledError(message);
   }
 
-  return new UnspecifiedError();
+  return new UnspecifiedError(message);
 }
 
 export function getTransactionError(transaction: Payment | Transfer) {
