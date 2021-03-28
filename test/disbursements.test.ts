@@ -151,7 +151,7 @@ describe("Disbursements", function() {
       ).to.be.fulfilled.then(() => {
         expect(mockAdapter.history.get).to.have.lengthOf(1);
         expect(mockAdapter.history.get[0].url).to.eq(
-          "/disbursement/v1_0/accountholder/MSISDN/0772000000/active"
+          "/disbursement/v1_0/accountholder/msisdn/0772000000/active"
         );
       });
     });

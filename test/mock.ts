@@ -61,7 +61,7 @@ export function createMock(): [AxiosInstance, MockAdapter] {
 
   mock
     .onGet(
-      /\/disbursement\/v1_0\/accountholder\/(MSISDN|EMAIL|PARTY_CODE)\/\w+/
+      /\/disbursement\/v1_0\/accountholder\/(msisdn|email|party_code)\/\w+/
     )
     .reply(200, "true");
 
