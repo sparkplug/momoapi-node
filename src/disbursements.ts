@@ -175,9 +175,9 @@ export default class Disbursements {
   public isPayerActive(
     id: string,
     type: PartyIdType = PartyIdType.MSISDN
-  ): Promise<string> {
+  ): Promise<{ result: boolean }> {
     return this.client
-      .get<string>(`/disbursement/v1_0/accountholder/${String(type).toLowerCase()}/${id}/active`)
+      .get<{ result: boolean }>(`/disbursement/v1_0/accountholder/${String(type).toLowerCase()}/${id}/active`)
       .then(response => response.data);
   }
 }
