@@ -169,7 +169,7 @@ Used to transfer an amount from the owner’s account to a payee account. It ret
 
 3. `getBalance(): Promise<Balance>`: Get your account balance.
 
-4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<string>`: This method is used to check if an account holder is registered and active in the system.
+4. `isPayerActive(id: string, type: PartyIdType = "MSISDN"): Promise<{ result: boolean }>`: This method is used to check if an account holder is registered and active in the system.
 
 #### Sample Code
 
