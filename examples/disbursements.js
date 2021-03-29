@@ -9,20 +9,30 @@ const disbursements = Disbursements({
   primaryKey: process.env.DISBURSEMENTS_PRIMARY_KEY
 });
 
+const partyId = "256776564739";
+const partyIdType = momo.PayerType.MSISDN;
 // Transfer
 disbursements
-  .transfer({
-    amount: "100",
-    currency: "EUR",
-    externalId: "947354",
-    payee: {
-      partyIdType: "MSISDN",
-      partyId: "+256776564739"
-    },
-    payerMessage: "testing",
-    payeeNote: "hello",
-    callbackUrl: "https://75f59b50.ngrok.io"
-  })
+    .isPayerActive(partyId, partyIdType)
+    .then((data) => {
+        console.log(data);
+        if (!data || !data.result || data.result !== true) {
+            return Promise.reject("Party not active");
+        }
+        return disbursements.transfer({
+            amount: "100",
+            currency: "EUR",
+            externalId: "947354",
+            payee: {
+                partyIdType,
+                partyId
+            },
+            payerMessage: "testing",
+            payeeNote: "hello",
+            callbackUrl: process.env.CALLBACK_URL ? process.env.CALLBACK_URL : "https://75f59b50.ngrok.io"
+        });
+    })
+    
   .then(transactionId => {
     console.log({ transactionId });
 
