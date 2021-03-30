@@ -14,9 +14,9 @@ const partyIdType = momo.PayerType.MSISDN;
 // Transfer
 disbursements
     .isPayerActive(partyId, partyIdType)
-    .then((data) => {
-        console.log(data);
-        if (!data || !data.result || data.result !== true) {
+    .then((isActive) => {
+        console.log("Is Active ? ", isActive);
+        if (!isActive) {
             return Promise.reject("Party not active");
         }
         return disbursements.transfer({
