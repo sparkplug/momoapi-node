@@ -179,6 +179,6 @@ export default class Disbursements {
     return this.client
       .get<{ result: boolean }>(`/disbursement/v1_0/accountholder/${String(type).toLowerCase()}/${id}/active`)
       .then(response => response.data)
-      .then(data => data.result ? data.result : false)
+      .then(data => data.result ? data.result : false);
   }
 }
