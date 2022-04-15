@@ -184,9 +184,10 @@ export default class Collections {
   public isPayerActive(
     id: string,
     type: PartyIdType = PartyIdType.MSISDN
-  ): Promise<string> {
+  ): Promise<boolean> {
     return this.client
-      .get<string>(`/collection/v1_0/accountholder/${type}/${id}/active`)
-      .then(response => response.data);
+      .get<{result: boolean}>(`/collection/v1_0/accountholder/${type}/${id}/active`)
+      .then(response => response.data)
+      .then(data => data.result ? data.result : false);
   }
 }
