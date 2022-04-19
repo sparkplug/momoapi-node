@@ -17,7 +17,7 @@ remittances
     .then((isActive) => {
         console.log("Is Active ? ", isActive);
         if (!isActive) {
-            return Promise.reject("Party not active");
+            return Promise.reject( new Error("Party not active"));
         }
         return remittances.remit({
             amount: "100",
@@ -29,7 +29,7 @@ remittances
             },
             payerMessage: "testing",
             payeeNote: "hello",
-            callbackUrl: process.env.CALLBACK_URL ? process.env.CALLBACK_URL : "https://75f59b50.ngrok.io"
+            callbackUrl: process.env.CALLBACK_URL
         });
     })
     
