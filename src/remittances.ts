@@ -15,7 +15,7 @@ export interface RemittanceRequest {
    * Unique Transfer Reference (UUID v4), will be automatically generated if not explicitly supplied
    */
 
-  referenceId?: string;
+  referenceId: string;
   /**
    * Amount that will be debited from the payer account.
    */
