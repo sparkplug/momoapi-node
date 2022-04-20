@@ -56,7 +56,7 @@ export function validateRemittance( remittanceRequest: RemittanceRequest
   const { amount, currency, payee, referenceId }: RemittanceRequest = remittanceRequest || {};
   return Promise.resolve().then(() => {
     strictEqual(isTruthy(referenceId), true, "referenceId is required");
-    strictEqual(isUuid4(referenceId as string), true, "referenceId must be a valid uuid v4");
+    strictEqual(isUuid4(referenceId), true, "referenceId must be a valid uuid v4");
     strictEqual(isTruthy(amount), true, "amount is required");
     strictEqual(isNumeric(amount), true, "amount must be a number");
     strictEqual(isTruthy(currency), true, "currency is required");
