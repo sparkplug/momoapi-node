@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import { Payment } from "./collections";
 import { FailureReason } from "./common";
 import { Transfer } from "./disbursements";
+import {Remit} from "./remittances";
 
 interface ErrorBody {
   code: FailureReason;
@@ -9,7 +10,7 @@ interface ErrorBody {
 }
 
 export class MtnMoMoError extends Error {
-  public transaction?: Payment | Transfer;
+  public transaction?: Payment | Transfer | Remit;
 
   constructor(message?: string) {
     super(message);
@@ -171,7 +172,7 @@ export function getError(code?: FailureReason, message?: string) {
   return new UnspecifiedError(message);
 }
 
-export function getTransactionError(transaction: Payment | Transfer) {
+export function getTransactionError(transaction: Payment | Transfer | Remit) {
   const error: MtnMoMoError = getError(transaction.reason as FailureReason);
   error.transaction = transaction;
 

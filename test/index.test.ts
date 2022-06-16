@@ -30,6 +30,12 @@ describe("MomoClient", function() {
           .to.have.property("Disbursements")
           .that.is.a("function");
       });
+
+      it("returns a creator for Remittances client", function() {
+        expect(momo.create({ callbackHost: "example.com" }))
+          .to.have.property("Remittances")
+          .that.is.a("function");
+      });
     });
   });
 });

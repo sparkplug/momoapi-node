@@ -4,6 +4,7 @@ import MockAdapter from "axios-mock-adapter";
 import { Payment } from "../src/collections";
 import { AccessToken, Balance, Credentials } from "../src/common";
 import { Transfer } from "../src/disbursements";
+import {Remit} from "../src/remittances";
 
 export function createMock(): [AxiosInstance, MockAdapter] {
   const client = axios.create({
@@ -84,5 +85,35 @@ export function createMock(): [AxiosInstance, MockAdapter] {
     currency: "UGX"
   } as Balance);
 
+  mock.onPost("/remittance/token/").reply(200, {
+    access_token: "token",
+    token_type: "access_token",
+    expires_in: 3600
+  } as AccessToken);
+
+  mock
+    .onGet(
+      /\/remittance\/v1_0\/accountholder\/(msisdn|email|party_code)\/\w+/
+    )
+    .reply(200, "true");
+
+  mock.onPost("/remittance/v1_0/transfer").reply(201);
+
+  mock.onGet(/\/remittance\/v1_0\/transfer\/[\w\-]+/).reply(200, {
+    financialTransactionId: "tx id",
+    externalId: "string",
+    amount: "2000",
+    currency: "UGX",
+    payee: {
+      partyIdType: "MSISDN",
+      partyId: "256772000000"
+    },
+    status: "SUCCESSFUL"
+  } as Remit);
+
+  mock.onGet("/remittance/v1_0/account/balance").reply(200, {
+    availableBalance: "2000",
+    currency: "UGX"
+  } as Balance);
   return [client, mock];
 }
