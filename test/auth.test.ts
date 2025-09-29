@@ -5,6 +5,7 @@ import { expect } from "./chai";
 import {
   authorizeCollections,
   authorizeDisbursements,
+  authorizeRemittances,
   createBasicAuthToken,
   createTokenRefresher
 } from "../src/auth";
@@ -84,6 +85,21 @@ describe("Auth", function() {
       });
     });
   });
+
+  describe("authorizeRemittances", function() {
+    it("makes the correct request", function() {
+      const [mockClient, mockAdapter] = createMock();
+      return expect(
+        authorizeRemittances(config, mockClient)
+      ).to.be.fulfilled.then(() => {
+        expect(mockAdapter.history.post).to.have.lengthOf(1);
+        expect(mockAdapter.history.post[0].url).to.eq("/remittance/token/");
+        expect(mockAdapter.history.post[0].headers.Authorization).to.eq(
+          "Basic " + Buffer.from("id:secret").toString("base64")
+        );
+      });
+    });
+  });  
 
   describe("createBasicAuthToken", function() {
     it("encodes id and secret in base64", function() {

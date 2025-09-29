@@ -1,5 +1,7 @@
 export { Payment, PaymentRequest } from "./collections";
 export { Transfer, TransferRequest } from "./disbursements";
+export { Remit, RemittanceRequest } from "./remittances";
+
 export * from "./errors";
 export {
   PartyIdType as PayerType,
@@ -16,11 +18,13 @@ import { AxiosInstance } from "axios";
 
 import Collections from "./collections";
 import Disbursements from "./disbursements";
+import Remittances from "./remittances";
 import Users from "./users";
 
 import {
   authorizeCollections,
   authorizeDisbursements,
+  authorizeRemittances,
   createTokenRefresher
 } from "./auth";
 import { createAuthClient, createClient } from "./client";
@@ -41,6 +45,7 @@ import {
 export interface MomoClient {
   Collections(productConfig: ProductConfig): Collections;
   Disbursements(productConfig: ProductConfig): Disbursements;
+  Remittances(productConfig: ProductConfig): Remittances;
   Users(subscription: SubscriptionConfig): Users;
 }
 
@@ -87,6 +92,21 @@ export function create(globalConfig: GlobalConfig): MomoClient {
       );
 
       return new Disbursements(client);
+    },
+
+    Remittances(productConfig: ProductConfig): Remittances {
+      const config: Config = {
+        ...defaultGlobalConfig,
+        ...globalConfig,
+        ...productConfig,
+      };
+
+      const client: AxiosInstance = createAuthClient(
+        createTokenRefresher(authorizeRemittances, config),
+        createClient(config)
+      );
+
+      return new Remittances(client);
     },
 
     Users(subscriptionConfig: SubscriptionConfig): Users {

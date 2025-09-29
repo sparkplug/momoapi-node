@@ -70,6 +70,20 @@ export const authorizeDisbursements: Authorizer = function(
     .then(response => response.data);
 };
 
+export const authorizeRemittances: Authorizer = function(
+  config: Config,
+  client: AxiosInstance = createClient(config)
+): Promise<AccessToken> {
+  const basicAuthToken: string = createBasicAuthToken(config);
+  return client
+    .post<AccessToken>("/remittance/token/", null, {
+      headers: {
+        Authorization: `Basic ${basicAuthToken}`
+      }
+    })
+    .then(response => response.data);
+};
+
 export function createBasicAuthToken(config: UserConfig): string {
   return Buffer.from(`${config.userId}:${config.userSecret}`).toString(
     "base64"

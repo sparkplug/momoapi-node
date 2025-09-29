@@ -9,6 +9,7 @@ import {
   UserConfig
 } from "./common";
 import { TransferRequest } from "./disbursements";
+import {RemittanceRequest} from "./remittances";
 
 export function validateRequestToPay(
   paymentRequest: PaymentRequest
@@ -36,6 +37,26 @@ export function validateTransfer(
   return Promise.resolve().then(() => {
     strictEqual(isTruthy(referenceId), true, "referenceId is required");
     strictEqual(isUuid4(referenceId as string), true, "referenceId must be a valid uuid v4");
+    strictEqual(isTruthy(amount), true, "amount is required");
+    strictEqual(isNumeric(amount), true, "amount must be a number");
+    strictEqual(isTruthy(currency), true, "currency is required");
+    strictEqual(isTruthy(payee), true, "payee is required");
+    strictEqual(isTruthy(payee.partyId), true, "payee.partyId is required");
+    strictEqual(
+      isTruthy(payee.partyIdType),
+      true,
+      "payee.partyIdType is required"
+    );
+    strictEqual(isString(currency), true, "amount must be a string");
+  });
+}
+
+export function validateRemittance( remittanceRequest: RemittanceRequest
+): Promise<void> {
+  const { amount, currency, payee, referenceId }: RemittanceRequest = remittanceRequest || {};
+  return Promise.resolve().then(() => {
+    strictEqual(isTruthy(referenceId), true, "referenceId is required");
+    strictEqual(isUuid4(referenceId), true, "referenceId must be a valid uuid v4");
     strictEqual(isTruthy(amount), true, "amount is required");
     strictEqual(isNumeric(amount), true, "amount must be a number");
     strictEqual(isTruthy(currency), true, "currency is required");
